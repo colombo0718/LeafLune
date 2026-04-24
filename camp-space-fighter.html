@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>太空戰機任務：3D建模與AI競技挑戰營 | LeafLune Edutainment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="五天旅程：用 MagicaVoxel 設計戰機、3D 列印帶回家，再用 AI 強化學習訓練自己的戰機 Agent 進行競技對戰。結合創意建模、實體製作與 AI 入門的旗艦營隊。" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #07090f; --bg2: #0d1117; --bg3: #111827;
+      --green: #3ddc84; --blue: #38bdf8; --gold: #fbbf24; --pink: #f472b6; --purple: #a78bfa;
+      --text: #f1f5f9; --sub: #94a3b8; --dim: #475569; --border: rgba(255,255,255,0.08);
+      --max: 1080px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 99; background: rgba(7,9,15,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; gap: 2rem; height: 56px; }
+    .nav-logo { display: flex; align-items: center; gap: .6rem; font-weight: 700; font-size: 1rem; }
+    .nav-logo img { width: 28px; height: 28px; }
+    .nav-links { display: flex; gap: 1.5rem; font-size: .875rem; color: var(--sub); margin-left: auto; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-back { color: var(--blue) !important; }
+
+    /* HERO */
+    .hero { padding: 5rem 0 4rem; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(56,189,248,0.08) 0%, transparent 70%); pointer-events: none; }
+    .hero-inner { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .hero-tag { display: inline-flex; align-items: center; gap: .5rem; background: rgba(56,189,248,0.1); color: var(--blue); border: 1px solid rgba(56,189,248,0.25); border-radius: 99px; padding: .3rem 1rem; font-size: .8rem; margin-bottom: 1.25rem; }
+    .hero h1 { font-size: clamp(1.75rem, 4vw, 2.6rem); font-weight: 800; line-height: 1.25; margin-bottom: 1rem; }
+    .hero h1 .b { color: var(--blue); }
+    .hero h1 .g { color: var(--green); }
+    .hero-sub { color: var(--sub); font-size: 1rem; line-height: 1.8; margin-bottom: 2rem; }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 2rem; }
+    .badge { padding: .3rem .8rem; border-radius: 99px; font-size: .78rem; font-weight: 600; }
+    .badge-blue { background: rgba(56,189,248,0.15); color: var(--blue); }
+    .badge-green { background: rgba(61,220,132,0.15); color: var(--green); }
+    .badge-gold { background: rgba(251,191,36,0.15); color: var(--gold); }
+    .btn { display: inline-block; padding: .65rem 1.5rem; border-radius: 10px; font-size: .9rem; font-weight: 700; transition: opacity .15s; }
+    .btn-blue { background: var(--blue); color: #07090f; }
+    .btn-blue:hover { opacity: .85; }
+    .btn-ghost { border: 1px solid var(--border); color: var(--sub); margin-left: .75rem; }
+    .btn-ghost:hover { color: var(--text); }
+    .hero-visual { background: linear-gradient(135deg, #0a1628 0%, #0d2040 50%, #080f1e 100%); border: 1px solid rgba(56,189,248,0.2); border-radius: 20px; padding: 2.5rem; text-align: center; }
+    .hero-emoji { font-size: 5rem; display: block; margin-bottom: 1rem; filter: drop-shadow(0 0 20px rgba(56,189,248,0.5)); }
+    .hero-visual-title { color: var(--blue); font-weight: 700; font-size: 1rem; margin-bottom: .5rem; }
+    .hero-visual-sub { color: var(--sub); font-size: .85rem; line-height: 1.6; }
+
+    /* SECTION COMMON */
+    section { padding: 4rem 0; }
+    .section-label { font-size: .78rem; color: var(--blue); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .75rem; }
+    .section-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; margin-bottom: 1rem; }
+    .section-sub { color: var(--sub); font-size: .95rem; line-height: 1.8; max-width: 600px; }
+
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    .feature-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; }
+    .feature-icon { font-size: 1.75rem; margin-bottom: .75rem; }
+    .feature-card h3 { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; }
+    .feature-card p { color: var(--sub); font-size: .83rem; line-height: 1.7; }
+
+    /* SCHEDULE */
+    .schedule-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-top: 2.5rem; }
+    .day-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .day-header { padding: .75rem 1rem; font-weight: 700; font-size: .85rem; text-align: center; }
+    .day-header.d1 { background: rgba(56,189,248,0.15); color: var(--blue); }
+    .day-header.d2 { background: rgba(61,220,132,0.15); color: var(--green); }
+    .day-header.d3 { background: rgba(251,191,36,0.15); color: var(--gold); }
+    .day-header.d4 { background: rgba(244,114,182,0.15); color: var(--pink); }
+    .day-header.d5 { background: rgba(167,139,250,0.15); color: var(--purple); }
+    .day-body { padding: 1rem; }
+    .day-item { margin-bottom: .75rem; }
+    .day-item:last-child { margin-bottom: 0; }
+    .day-time { font-size: .7rem; color: var(--dim); margin-bottom: .2rem; }
+    .day-act { font-size: .82rem; color: var(--text); line-height: 1.5; }
+
+    /* TAKEAWAYS */
+    .takeaway-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .takeaway { display: flex; align-items: flex-start; gap: 1rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .takeaway-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: .1rem; }
+    .takeaway h4 { font-size: .9rem; font-weight: 700; margin-bottom: .3rem; }
+    .takeaway p { color: var(--sub); font-size: .82rem; line-height: 1.6; }
+
+    /* TOOLS */
+    .tools-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+    .tool-tag { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: .4rem .9rem; font-size: .82rem; color: var(--sub); }
+
+    /* CTA */
+    .cta-box { background: linear-gradient(135deg, #0a1f35, #071220); border: 1px solid rgba(56,189,248,0.25); border-radius: 20px; padding: 3rem; text-align: center; margin: 4rem 0; }
+    .cta-box h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: .75rem; }
+    .cta-box p { color: var(--sub); margin-bottom: 2rem; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 1.5rem; font-size: .875rem; color: var(--sub); }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: .8rem; color: var(--dim); }
+
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .schedule-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/leaflune_logo_nobg.png" alt="LeafLune" />
+      LeafLune
+    </a>
+    <div class="nav-links">
+      <a href="/courses.html" class="nav-back">← 課程總覽</a>
+      <a href="https://reinroom.leaflune.org" target="_blank">ReinRoom</a>
+      <a href="mailto:colombo0718@gmail.com">聯絡我們</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">🚀 AI × 3D建模 × 實體製作</div>
+        <h1>太空戰機任務：<br><span class="b">3D建模</span>與<span class="g">AI競技</span><br>挑戰營</h1>
+        <p class="hero-sub">
+          設計你的戰機、列印帶回家，<br>
+          再用 AI 強化學習讓它自己學會對戰。<br>
+          五天，從零到能打的太空 AI 戰機。
+        </p>
+        <div class="hero-badges">
+          <span class="badge badge-blue">🤖 AI 強化學習</span>
+          <span class="badge badge-green">🖨️ 3D 列印實體作品</span>
+          <span class="badge badge-gold">⏱ 5 天營隊</span>
+          <span class="badge badge-blue">🎯 國小高年級 ～ 國中</span>
+        </div>
+        <a href="mailto:colombo0718@gmail.com" class="btn btn-blue">報名 / 洽詢</a>
+        <a href="#schedule" class="btn btn-ghost">查看課程表</a>
+      </div>
+      <div class="hero-visual">
+        <span class="hero-emoji">🛸</span>
+        <div class="hero-visual-title">你將打造的</div>
+        <div class="hero-visual-sub">
+          🎨 MagicaVoxel 像素戰機<br>
+          🖨️ 3D 列印實體模型<br>
+          🤖 訓練好的 AI 戰機 Agent<br>
+          📊 成果發表簡報
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section>
+  <div class="wrap">
+    <div class="section-label">課程特色</div>
+    <div class="section-title">四大體驗，一次集滿</div>
+    <div class="section-sub">跨領域整合不是口號——每一天都有看得見的成果。</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>創意建模</h3>
+        <p>用 MagicaVoxel 設計動畫戰機，加入震動、噴火特效。從零開始，做出只屬於你的戰機。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🖨️</div>
+        <h3>實體化作品</h3>
+        <p>3D 列印把你的戰機從螢幕變成真實物件，親手上色、放進桌上攝影棚拍紀念照。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI 競技啟蒙</h3>
+        <p>用強化學習（Reinforcement Learning）訓練 AI Agent，讓它學會躲隕石、學會對戰——親眼看見 AI 變強的過程。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎤</div>
+        <h3>成果發表</h3>
+        <p>用 ChatGPT 整理學習歷程、Gamma AI 快速製作簡報，在最後一天上台展示五天的成果。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="wrap">
+    <div class="section-label">課程行程</div>
+    <div class="section-title">五天，完整旅程</div>
+    <div class="schedule-grid">
+      <div class="day-card">
+        <div class="day-header d1">DAY 1<br>建模啟程</div>
+        <div class="day-body">
+          <div class="day-item">
+            <div class="day-time">09:30 – 10:30</div>
+            <div class="day-act">🎮 營隊開場 & 遊戲體驗<br>RL Agent 對戰觀察</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">10:30 – 12:00</div>
+            <div class="day-act">👀 AI 行為觀察與討論</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">13:30 – 14:30</div>
+            <div class="day-act">🧱 MagicaVoxel 基礎教學</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">14:30 – 16:00</div>
+            <div class="day-act">✏️ 完成戰機模型並儲存</div>
+          </div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header d2">DAY 2<br>動畫進化</div>
+        <div class="day-body">
+          <div class="day-item">
+            <div class="day-time">09:30 – 10:30</div>
+            <div class="day-act">✨ 戰機震動 & 噴火動畫</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">10:30 – 12:00</div>
+            <div class="day-act">🌐 模型上傳至遊戲網頁測試</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">13:30 – 14:30</div>
+            <div class="day-act">🧠 強化學習基本理論</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">14:30 – 16:00</div>
+            <div class="day-act">🔬 認識 AI Reinforce Lab</div>
+          </div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header d3">DAY 3<br>AI 訓練</div>
+        <div class="day-body">
+          <div class="day-item">
+            <div class="day-time">09:30 – 10:30</div>
+            <div class="day-act">🌑 訓練 AI 躲避隕石</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">10:30 – 12:00</div>
+            <div class="day-act">⚔️ 訓練 AI 戰機對戰</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">13:30 – 14:30</div>
+            <div class="day-act">🏆 人機對戰挑戰賽</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">14:30 – 16:00</div>
+            <div class="day-act">📊 記錄 AI 訓練數據</div>
+          </div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header d4">DAY 4<br>實體化</div>
+        <div class="day-body">
+          <div class="day-item">
+            <div class="day-time">09:30 – 10:30</div>
+            <div class="day-act">🖨️ 發放 3D 列印模型</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">10:30 – 12:00</div>
+            <div class="day-act">🎨 創意上色 & 桌上攝影</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">13:30 – 14:30</div>
+            <div class="day-act">🔧 模型遊戲效果優化</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">14:30 – 16:00</div>
+            <div class="day-act">📋 準備成果展示資料</div>
+          </div>
+        </div>
+      </div>
+      <div class="day-card">
+        <div class="day-header d5">DAY 5<br>成果發表</div>
+        <div class="day-body">
+          <div class="day-item">
+            <div class="day-time">09:30 – 10:30</div>
+            <div class="day-act">🤖 AI 工具介紹<br>ChatGPT + Gamma</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">10:30 – 12:00</div>
+            <div class="day-act">📝 撰寫講稿 & 製作簡報</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">13:30 – 14:30</div>
+            <div class="day-act">🎤 成果發表與展示</div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">14:30 – 16:00</div>
+            <div class="day-act">🏅 結業儀式 & 證書頒發</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TAKEAWAYS -->
+<section>
+  <div class="wrap">
+    <div class="section-label">帶走什麼</div>
+    <div class="section-title">五天結束後，你擁有</div>
+    <div class="takeaway-list">
+      <div class="takeaway">
+        <div class="takeaway-icon">🛸</div>
+        <div>
+          <h4>3D 列印戰機實體</h4>
+          <p>你親手設計的像素戰機，從電腦列印成真實物件，帶回家當紀念品。</p>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-icon">🤖</div>
+        <div>
+          <h4>訓練好的 AI Agent</h4>
+          <p>你訓練的 AI 戰機，真的學會了遊戲規則——可以看數據，可以對戰。</p>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-icon">📊</div>
+        <div>
+          <h4>成果發表簡報</h4>
+          <p>用 AI 工具整理出的學習歷程簡報，可以跟家人、同學分享你做了什麼。</p>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-icon">🧠</div>
+        <div>
+          <h4>強化學習基礎概念</h4>
+          <p>理解什麼是 State、Action、Reward，明白 AI 是怎麼「學習」的——不是背答案。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section>
+  <div class="wrap">
+    <div class="section-label">課程使用工具</div>
+    <div class="section-title">你將實際操作</div>
+    <div class="tools-row">
+      <span class="tool-tag">🎨 MagicaVoxel（3D 像素建模）</span>
+      <span class="tool-tag">🖨️ 3D 列印機</span>
+      <span class="tool-tag">🤖 ReinRoom AI 訓練平台</span>
+      <span class="tool-tag">💬 ChatGPT</span>
+      <span class="tool-tag">📊 Gamma AI 簡報工具</span>
+      <span class="tool-tag">📷 桌上攝影棚</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="wrap">
+  <div class="cta-box" id="contact">
+    <h2>讓你的孩子來挑戰 🚀</h2>
+    <p>學校、安親班、社區活動合作皆歡迎。<br>名額有限，歡迎來信詢問檔期與報價。</p>
+    <a href="mailto:colombo0718@gmail.com" class="btn btn-blue">✉ 立即洽詢</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-links">
+      <a href="/">LeafLune 首頁</a>
+      <a href="/courses.html">課程總覽</a>
+      <a href="https://reinroom.leaflune.org" target="_blank">ReinRoom 平台</a>
+      <a href="/privacy.html">隱私權政策</a>
+    </div>
+    <div class="footer-copy">© 2025 LeafLune Edutainment Studio. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
