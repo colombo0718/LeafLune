@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>LeafLune 宇宙 | 宣學習 · LeafLune · 戰術空間</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="LeafLune 宇宙由三大品牌構成：宣學習 XuanXuexi（教育）、LeafLune（認證與身份）、戰術空間 Strategy Space（競賽與對戰）。ReinRoom 強化教室平台、GameGeek 多工遊戲機、CubicCraft 旗艦遊戲，以及語言卡牌與親子桌遊。">
+  <style>
+    :root {
+      --bg: #050814;
+      --bg-soft: #0b1020;
+      --card: #111826;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text-main: #f9fafb;
+      --text-sub: #9ca3af;
+      --border-soft: #1f2937;
+      --pill-bg: rgba(15, 23, 42, 0.9);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Noto Sans TC", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+      border-bottom: 1px solid rgba(148,163,184,0.25);
+    }
+    .nav-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+    }
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: flex-end;
+    }
+    .nav-link {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      color: var(--text-sub);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s ease-out;
+    }
+    .nav-link:hover {
+      color: var(--text-main);
+      border-color: rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.85);
+    }
+
+    main {
+      flex: 1;
+    }
+    .section {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem;
+    }
+    .hero {
+      padding-top: 3rem;
+      padding-bottom: 2.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: var(--pill-bg);
+      border: 1px solid rgba(148,163,184,0.6);
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-bottom: 0.9rem;
+    }
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #4ade80;
+      box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.25);
+    }
+    .hero-title {
+      font-size: clamp(2.1rem, 4vw, 2.7rem);
+      line-height: 1.2;
+      margin: 0 0 0.75rem;
+    }
+    .hero-title span {
+      color: var(--accent);
+    }
+    .hero-tagline {
+      font-size: 1rem;
+      color: var(--text-sub);
+      margin-bottom: 1.2rem;
+    }
+    .hero-tagline-2 {
+      font-size: 0.9rem;
+      color: #cbd5f5;
+      opacity: 0.95;
+      margin-bottom: 1.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .btn-primary {
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #38bdf8, #4ade80);
+      color: #020617;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(56,189,248,0.4);
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 40px rgba(56,189,248,0.55);
+    }
+    .btn-ghost {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.8);
+      color: var(--text-sub);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+    }
+    .btn-ghost:hover {
+      color: var(--text-main);
+      border-color: var(--accent);
+    }
+    .hero-right {
+      justify-self: center;
+    }
+    .hero-card {
+      width: min(320px, 100%);
+      border-radius: 1.5rem;
+      padding: 1.4rem 1.3rem 1.2rem;
+      background: radial-gradient(circle at top, #1d283a, #020617);
+      border: 1px solid rgba(148,163,184,0.45);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.7);
+    }
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.85rem;
+    }
+    .hero-logo {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .hero-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .hero-card-sub {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+    .hero-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.7rem;
+    }
+    .hero-pill {
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      background: rgba(15,23,42,0.9);
+    }
+    .hero-score {
+      margin-top: 0.7rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: 0.9rem;
+      background: rgba(15,23,42,0.95);
+      border: 1px dashed rgba(148,163,184,0.6);
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+    .hero-score strong {
+      color: #fbbf24;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      margin: 0 0 0.5rem;
+    }
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      max-width: 620px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.6rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .card {
+      background: radial-gradient(circle at top left, var(--accent-soft), var(--card));
+      border-radius: 1.1rem;
+      border: 1px solid var(--border-soft);
+      padding: 1rem 1rem 1.05rem;
+    }
+    .card h3 {
+      font-size: 1rem;
+      margin: 0 0 0.45rem;
+    }
+    .card .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      color: var(--accent);
+      border: 1px solid rgba(56,189,248,0.6);
+      margin-bottom: 0.5rem;
+    }
+    .card p {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin: 0 0 0.4rem;
+      line-height: 1.55;
+    }
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.25rem 0 0;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+    .card ul li {
+      margin-bottom: 0.15rem;
+    }
+    .bullet {
+      color: var(--accent);
+      margin-right: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    .subgrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.3rem;
+    }
+    .subcard {
+      background: rgba(15,23,42,0.95);
+      border-radius: 0.9rem;
+      border: 1px solid var(--border-soft);
+      padding: 0.9rem 0.9rem 0.95rem;
+    }
+    .subcard h3 {
+      font-size: 0.9rem;
+      margin: 0 0 0.35rem;
+    }
+    .subcard .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      padding: 0.15rem 0.45rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: var(--text-sub);
+      margin-bottom: 0.4rem;
+    }
+    .subcard p {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* 新增：三大品牌 icon 用的小圓底 */
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.4rem;
+      border: 1px solid rgba(148,163,184,0.6);
+    }
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .cta {
+      margin-top: 2.5rem;
+      padding: 1.4rem 1.2rem;
+      border-radius: 1.2rem;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: radial-gradient(circle at left, rgba(56,189,248,0.16), #020617);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cta-main {
+      font-size: 0.95rem;
+    }
+    .cta-sub {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      margin-top: 0.2rem;
+    }
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    footer {
+      border-top: 1px solid rgba(31,41,55,0.9);
+      background: #020617;
+      padding: 1rem 1.3rem 1.3rem;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+    .footer-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 840px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-right {
+        order: -1;
+      }
+      .hero-card {
+        margin-bottom: 0.5rem;
+      }
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .subgrid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 600px) {
+      header {
+        position: static;
+      }
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        justify-content: flex-start;
+      }
+      .hero {
+        padding-top: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <img src="leaflune_logo_nobg.png" alt="LeafLune Logo">
+        <div>
+          <div class="brand-title">LeafLune</div>
+          <div class="brand-sub">宣學習 · LeafLune · 戰術空間 的教育宇宙</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#brand" class="nav-link">品牌核心</a>
+        <a href="#universe" class="nav-link">三大品牌宇宙</a>
+        <a href="#xuanxuexi" class="nav-link">宣學習</a>
+        <a href="#leaflune-cert" class="nav-link">LeafLune 認證</a>
+        <a href="#strategy-space" class="nav-link">戰術空間</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="section hero">
+      <div>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          LeafLune Brand Universe
+          <span>· 教育 × 認證 × 競賽</span>
+        </div>
+        <h1 class="hero-title">
+          <span>學習變有趣，</span>玩樂有價值。
+        </h1>
+        <p class="hero-tagline">
+          LeafLune 宇宙由三個品牌構成：<br>
+          專攻教育的「宣學習 XuanXuexi」、負責身份與認證的「LeafLune」、
+          以及專注競賽與對戰的「戰術空間 Strategy Space」。
+        </p>
+        <p class="hero-tagline-2">
+          在這個架構之下，我們打造 ReinRoom 強化教室平台、GameGeek 多工遊戲機、
+          CubicCraft 太空旗艦遊戲，以及語言卡牌與親子桌遊，
+          讓每一次學習、每一場對戰，都能變成值得被晒出來的成長故事。
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="document.getElementById('brand').scrollIntoView({behavior:'smooth'})">
+            先看使命 · 願景 · 價值觀
+          </button>
+          <button class="btn-ghost" onclick="document.getElementById('universe').scrollIntoView({behavior:'smooth'})">
+            再看三大品牌宇宙
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brand core -->
+    <section id="brand" class="section">
+      <h2 class="section-title">LeafLune 品牌核心</h2>
+      <p class="section-sub">
+        LeafLune 不是補習班，也不是單純的遊戲公司，而是一個在 AI 時代重新設計「學習」這件事的實驗室。
+        我們用清楚的品牌三問來校準每一個產品與課程。
+      </p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="tag">使命 Mission</div>
+          <h3>讓學習變有趣，讓玩樂有價值。</h3>
+          <p>
+            學習不該只是壓力與考試，而是帶著好奇心闖關。<br>
+            玩樂也不該只是殺時間，而是能累積技能與作品。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>用遊戲化關卡取代枯燥練習。</li>
+            <li><span class="bullet">•</span>用可以「晒出來」的成果讓努力被看見。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">願景 Vision</div>
+          <h3>建構一個以 AI 競技驅動的成長型社會引擎。</h3>
+          <p>
+            透過 ReinRoom、GameGeek 與 CubicCraft，讓每個人都有機會成為
+            「AI 訓練大師」，在玩中與 AI 一起變強。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>把強化學習 (RL) 的精神帶入教育現場。</li>
+            <li><span class="bullet">•</span>把「爭強好勝」轉化為「彼此成長」的動力。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.2rem;">
+        <div class="tag">價值觀 Value</div>
+        <h3>點燃動機，就能打開自主學習的開關。</h3>
+        <p>
+          我們相信，真正持久的學習不是被逼出來的，而是自己想要變強。
+          所以 LeafLune 設計的每一套遊戲、每一次課程，都圍繞著一個問題：
+        </p>
+        <p style="margin-top:0.35rem; font-weight:500;">
+          「這樣設計，會讓玩家／學生更想主動再玩一次嗎？」
+        </p>
+      </div>
+    </section>
+
+    <!-- Brand universe: 三大品牌 -->
+    <section id="universe" class="section">
+      <h2 class="section-title">三大品牌宇宙：教育 · 認證 · 競賽</h2>
+      <p class="section-sub">
+        在使命 / 願景 / 價值觀之上，LeafLune 又長出了三個具體的對外品牌：
+        專責教育現場的「宣學習 XuanXuexi」、負責身份與認證的「LeafLune」、
+        以及集中所有比賽與對戰的「戰術空間 Strategy Space」。
+      </p>
+      <div class="subgrid">
+        <div class="subcard">
+          <div class="brand-icon">
+            <img src="XuanXuexi_emoji.png" alt="宣學習 XuanXuexi">
+          </div>
+          <div class="tag">教育 · 樂 · 地</div>
+          <h3>宣學習 XuanXuexi</h3>
+          <p>
+            面向老師、家長與學校的教育品牌。
+            名稱源自越南語 Xuân（春天），象徵長出葉子的季節，
+            是所有課程、教案與教具的對外門牌。
+          </p>
+        </div>
+        <div class="subcard">
+          <div class="brand-icon">
+            <img src="LeafLune_emoji.png" alt="LeafLune">
+          </div>
+          <div class="tag">認證 · 晒 · 人</div>
+          <h3>LeafLune</h3>
+          <p>
+            代表「葉與月」的世界觀與身份認同。
+            負責把學習成果、比賽紀錄與作品整理成可以自豪晒出來的成長檔案，
+            承接情緒價值與故事。
+          </p>
+        </div>
+        <div class="subcard">
+          <div class="brand-icon">
+            <img src="StrategySpace_emoji.png" alt="戰術空間 Strategy Space">
+          </div>
+          <div class="tag">競賽 · 比 · 天</div>
+          <h3>戰術空間 Strategy Space</h3>
+          <p>
+            所有對戰與比賽的總品牌。
+            GameGeek、CubicCraft 以及未來各種賽事都在這個宇宙底下運作，
+            是「上場，用策略說話」的地方。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- XuanXuexi -->
+    <section id="xuanxuexi" class="section">
+      <h2 class="section-title">宣學習 XuanXuexi · 教育品牌（地 / 樂）</h2>
+      <p class="section-sub">
+        宣學習是專門面向老師、家長與學校的教育品牌，
+        名字來自越南語「Xuân（春天）」，象徵長出葉子的季節。
+        這裡是所有課程與教案的起點。
+      </p>
+      <div class="grid">
+        <div class="card">
+          <div class="tag">ReinRoom · 強化教室</div>
+          <h3>把教室變成任務系統</h3>
+          <p>
+            ReinRoom 是宣學習在數位教學上的中樞，
+            讓老師可以把課程拆成任務、關卡與獎勵，
+            把原本單向的講解變成可反覆挑戰的任務樹。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>為每個班級建立任務地圖。</li>
+            <li><span class="bullet">•</span>追蹤學生的嘗試次數與進步軌跡。</li>
+            <li><span class="bullet">•</span>把 RL 的 reward 思維帶進教室。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">課程與教案</div>
+          <h3>從語言到 STEM 的遊戲化教材</h3>
+          <p>
+            特別擅長把抽象的概念拆成具體、可操作的活動，
+            例如用小遊戲帶數學公式、用任務制引導程式思維、
+            用劇情卡片引導語言輸出。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>國小～大專跨齡適用的模組化教案。</li>
+            <li><span class="bullet">•</span>AIGC × AI × STEM 混合課程。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">實體教具</div>
+          <h3>卡牌 × 桌遊 × 3D 物件</h3>
+          <p>
+            宣學習不只存在螢幕上，也存在桌面上與孩子手上：
+            拼音卡牌、句型卡、貓咪桌遊與 3D 列印道具，
+            都可以作為進入數位宇宙前的暖身。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>Pinyin Poker、Sentence Summoner。</li>
+            <li><span class="bullet">•</span>Crazy Cat 桌遊 × 3D 列印家具。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- LeafLune cert -->
+    <section id="leaflune-cert" class="section">
+      <h2 class="section-title">LeafLune · 認證與身份（人 / 晒）</h2>
+      <p class="section-sub">
+        LeafLune 是「葉與月」的宇宙，也是所有作品與身份的集合點。
+        它不像傳統證書是冰冷的一張紙，而是讓每個人可以自豪晒出來的成長足跡。
+      </p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="tag">作品與成就展示</div>
+          <h3>讓成果不只存在於系統後台</h3>
+          <p>
+            不論是 ReinRoom 的任務紀錄、GameGeek 的對戰成績、
+            或是 CubicCraft 的飛行軌跡、Pinyin Poker 的卡組設計，
+            都可以在 LeafLune 名義下被整理成一份「成長作品集」。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>活動照片、比賽紀錄、作品截圖。</li>
+            <li><span class="bullet">•</span>課程修畢紀錄與個人任務軌跡。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">認證與徽章</div>
+          <h3>情緒化的「身份認證」系統</h3>
+          <p>
+            我們更在意「你成為了什麼樣的人」，而不只是「你拿了幾分」。
+            因此 LeafLune 的認證會以徽章、稱號與故事的形式存在，
+            例如「ReinRoom 探索者」、「GameGeek 策略家」、「CubicCraft 飛行員」。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>角色化的稱號與段位。</li>
+            <li><span class="bullet">•</span>適合晒在社群與個人簡歷上的成長標記。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.2rem;">
+        <div class="tag">情緒價值與故事</div>
+        <h3>葉與月之間，是你也可以加入的宇宙</h3>
+        <p>
+          LeafLune 原本只是大學時期的一個名字，如今成為你與她共同的人生宇宙。
+          這份故事也會成為品牌的一部分，讓學生與家長知道：
+          這裡在乎的不只是成績，而是「人」本身。
+        </p>
+      </div>
+    </section>
+
+    <!-- Strategy Space -->
+    <section id="strategy-space" class="section">
+      <h2 class="section-title">戰術空間 Strategy Space · 競賽舞台（天 / 比）</h2>
+      <p class="section-sub">
+        戰術空間是所有遊戲、對戰與比賽的總品牌，
+        GameGeek 與 CubicCraft 都在這個宇宙底下運作。
+        這裡是一句話就能總結的定位：
+        「上場，用策略說話。」
+      </p>
+      <div class="grid">
+        <div class="card">
+          <div class="tag">Strategy Space</div>
+          <h3>所有對戰的宇宙入口</h3>
+          <p>
+            對外是「策略對戰平台」，對內是 RL 專有名詞 strategy space。
+            不論是人 vs 人、人 vs AI、AI vs AI 的對戰，
+            全部都在戰術空間裡發生。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>學校盃、區域賽與線上聯賽。</li>
+            <li><span class="bullet">•</span>支援多種遊戲規則與競賽形式。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">GameGeek</div>
+          <h3>戰術空間的遊戲機前端</h3>
+          <p>
+            GameGeek 是學生與玩家實際操作的「遊戲機介面」，
+            集中管理所有可用遊戲、任務與對戰房間，
+            並與 ReinRoom、戰術空間後端串接。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>啟動 / 加入對戰房間。</li>
+            <li><span class="bullet">•</span>支援 1v1、2v2、玩家 vs Agent。</li>
+            <li><span class="bullet">•</span>成績回寫到 ReinRoom 與 LeafLune 認證。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">CubicCraft</div>
+          <h3>太空任務旗艦競技</h3>
+          <p>
+            CubicCraft 承載的是你過去的太空背景與現在的遊戲開發實力，
+            是戰術空間裡最具代表性的旗艦作品之一。
+            玩家與 AI 都要在同一片宇宙中解題與對抗。
+          </p>
+          <ul>
+            <li><span class="bullet">•</span>結合物理模擬、路線規劃與操作。</li>
+            <li><span class="bullet">•</span>非常適合作為 RL Agent 的訓練場。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards & Boardgames -->
+    <section id="cards" class="section">
+      <h2 class="section-title">卡牌與親子桌遊 · 宣學習 × LeafLune 的橋樑</h2>
+      <p class="section-sub">
+        在進入複雜的 AI 與數位遊戲之前，LeafLune 宇宙很重視
+        「看得到、摸得到、一起玩的」實體體驗。
+        這些卡牌與桌遊一方面隸屬宣學習的教具，一方面也在 LeafLune 名義下成為可以晒的作品。
+      </p>
+      <div class="subgrid">
+        <div class="subcard">
+          <div class="tag">Pinyin Poker · 漢語拼音撲克牌</div>
+          <h3>把拼音變成可以開戰的牌組</h3>
+          <p>
+            以標準撲克牌規格設計的漢語拼音卡牌，
+            讓學生在玩牌的過程中反覆看見聲母、韻母與聲調。
+            既是工具牌，也是可以自行設計遊戲規則的戰鬥卡組。
+          </p>
+        </div>
+        <div class="subcard">
+          <div class="tag">Sentence Summoner（SS）</div>
+          <h3>句型召喚卡 · 練的是輸出而不是背誦</h3>
+          <p>
+            透過角色、動作、場景等元素卡，引導玩家組合出完整句子與短篇敘事。
+            適合英文與其他語言課程，用「出招」代替「造句練習」。
+          </p>
+        </div>
+        <div class="subcard">
+          <div class="tag">Crazy Cat · 瘋狂貓咪親子桌遊</div>
+          <h3>寓教於樂的 3D 房間大冒險</h3>
+          <p>
+            玩家扮演在房間裡亂竄的貓咪，透過擲骰、跳躍與路徑規劃，
+            爭取搶到最多罐罐，同時避免撞倒易碎物。
+            遊戲可結合 3D 列印家具與貓咪立牌，變成親子勞作課程。
+          </p>
+        </div>
+      </div>
+
+      <div class="cta">
+        <div>
+          <div class="cta-main">
+            🌙 LeafLune 想做的不只是一套教材，而是一條可以持續升級的成長旅程。
+          </div>
+          <div class="cta-sub">
+            從桌上的卡牌與貓咪桌遊，到螢幕裡的 ReinRoom、GameGeek、CubicCraft，
+            我們正在把「好玩」與「有用」、教育、認證與競賽縫合在一起。
+          </div>
+        </div>
+        <div class="cta-actions">
+          <button class="btn-primary" onclick="document.querySelector('body').scrollIntoView({behavior:'smooth'})">
+            回到頁首
+          </button>
+          <a href="https://reinroom.leaflune.org" target="_blank" class="btn-ghost">
+            立即體驗 ReinRoom 強化學習平台 →
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> LeafLune Edutainment Studio. All rights reserved.</div>
+      <div style="display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+        <span>宣學習 · LeafLune · 戰術空間</span>
+        <a href="/privacy.html" style="color:var(--text-sub);font-size:0.8rem;">隱私權政策</a>
+        <a href="mailto:colombo0718@gmail.com" style="color:var(--text-sub);font-size:0.8rem;">聯絡我們</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
