@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>孩子學 AI，要從哪裡開始？給家長的完整入門指南 | LeafLune</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="AI 教育不等於學寫程式。這篇文章幫助家長理解：什麼年紀適合開始、從哪個工具入手、怎麼判斷課程品質，以及最常見的誤區。" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#07090f; --bg2:#0d1117; --bg3:#111827;
+      --green:#3ddc84; --blue:#38bdf8; --gold:#fbbf24; --pink:#f472b6;
+      --text:#f1f5f9; --sub:#94a3b8; --dim:#475569; --border:rgba(255,255,255,0.08);
+      --max:720px;
+    }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif; -webkit-font-smoothing:antialiased; }
+    a { color:var(--blue); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { max-width:var(--max); margin:0 auto; padding:0 1.5rem; }
+
+    nav { position:sticky; top:0; z-index:99; background:rgba(7,9,15,0.9); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .nav-inner { display:flex; align-items:center; gap:2rem; height:56px; }
+    .nav-logo { display:flex; align-items:center; gap:.6rem; font-weight:700; font-size:1rem; color:var(--text); }
+    .nav-logo img { width:28px; height:28px; }
+    .nav-links { display:flex; gap:1.5rem; font-size:.875rem; color:var(--sub); margin-left:auto; }
+    .nav-links a { color:var(--sub); }
+    .nav-links a:hover { color:var(--text); text-decoration:none; }
+
+    .article-header { padding:4rem 0 2.5rem; }
+    .article-tag { display:inline-block; background:rgba(61,220,132,0.1); color:var(--green); border:1px solid rgba(61,220,132,0.25); border-radius:99px; padding:.25rem .9rem; font-size:.78rem; margin-bottom:1.25rem; }
+    .article-header h1 { font-size:clamp(1.6rem,4vw,2.2rem); font-weight:800; line-height:1.3; margin-bottom:1rem; }
+    .article-meta { color:var(--dim); font-size:.82rem; display:flex; gap:1.5rem; flex-wrap:wrap; }
+
+    .article-body { padding:2rem 0 5rem; }
+    .article-body h2 { font-size:1.25rem; font-weight:700; margin:2.5rem 0 .75rem; }
+    .article-body h3 { font-size:1rem; font-weight:700; margin:1.75rem 0 .5rem; color:var(--green); }
+    .article-body p { color:#cbd5e1; line-height:1.9; margin-bottom:1.1rem; font-size:.975rem; }
+    .article-body ul, .article-body ol { padding-left:1.5rem; margin-bottom:1.1rem; }
+    .article-body li { color:#cbd5e1; line-height:1.8; font-size:.975rem; margin-bottom:.4rem; }
+    .article-body strong { color:var(--text); }
+
+    .callout { background:var(--bg2); border-left:3px solid var(--green); border-radius:0 10px 10px 0; padding:1rem 1.25rem; margin:1.5rem 0; }
+    .callout p { margin:0; color:var(--sub); font-size:.9rem; }
+
+    .stage-list { display:flex; flex-direction:column; gap:1rem; margin:1.5rem 0; }
+    .stage { display:grid; grid-template-columns:48px 1fr; gap:1rem; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.25rem; align-items:flex-start; }
+    .stage-num { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.1rem; flex-shrink:0; }
+    .s1 { background:rgba(56,189,248,0.15); color:var(--blue); }
+    .s2 { background:rgba(61,220,132,0.15); color:var(--green); }
+    .s3 { background:rgba(251,191,36,0.15); color:var(--gold); }
+    .s4 { background:rgba(244,114,182,0.15); color:var(--pink); }
+    .stage-content h4 { font-size:.95rem; font-weight:700; margin-bottom:.35rem; }
+    .stage-content p { color:var(--sub); font-size:.875rem; line-height:1.7; margin:0; }
+
+    .myth-list { display:flex; flex-direction:column; gap:.9rem; margin:1.5rem 0; }
+    .myth { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.25rem; }
+    .myth-q { color:var(--pink); font-size:.85rem; font-weight:600; margin-bottom:.4rem; }
+    .myth-a { color:#cbd5e1; font-size:.875rem; line-height:1.7; }
+
+    .checklist { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+    .checklist h4 { font-size:.9rem; color:var(--gold); font-weight:600; margin-bottom:1rem; }
+    .check-item { display:flex; gap:.75rem; align-items:flex-start; margin-bottom:.6rem; font-size:.875rem; color:#cbd5e1; line-height:1.6; }
+    .check-item:last-child { margin-bottom:0; }
+    .check-icon { color:var(--green); flex-shrink:0; margin-top:.1rem; }
+
+    .related { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:1.75rem; margin-top:3rem; }
+    .related h3 { font-size:.95rem; color:var(--sub); margin-bottom:1rem; }
+    .related-links { display:flex; flex-direction:column; gap:.6rem; }
+    .related-links a { color:var(--text); font-size:.9rem; }
+    .related-links a:hover { color:var(--blue); }
+
+    footer { border-top:1px solid var(--border); padding:2rem 0; }
+    .footer-inner { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .footer-links { display:flex; gap:1.5rem; font-size:.875rem; color:var(--sub); }
+    .footer-links a { color:var(--sub); }
+    .footer-links a:hover { color:var(--text); text-decoration:none; }
+    .footer-copy { font-size:.8rem; color:var(--dim); }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-logo"><img src="/leaflune_logo_nobg.png" alt="LeafLune" />LeafLune</a>
+    <div class="nav-links">
+      <a href="/">首頁</a>
+      <a href="/courses.html">營隊課程</a>
+      <a href="https://reinroom.leaflune.org" target="_blank">ReinRoom</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="article-header">
+    <div class="article-tag">🧒 親子 × AI 教育</div>
+    <h1>孩子學 AI，要從哪裡開始？<br>給家長的完整入門指南</h1>
+    <div class="article-meta">
+      <span>📅 2025 年</span>
+      <span>✍️ LeafLune Edutainment</span>
+      <span>⏱ 閱讀約 7 分鐘</span>
+    </div>
+  </header>
+
+  <article class="article-body">
+    <p>
+      「AI 這麼重要，我要讓孩子學——但不知道從哪裡開始。」
+      這是現在很多家長的共同困惑。市面上的課程琳琅滿目，有人說要學 Python，有人說要學 Scratch，有人說要學 ChatGPT……
+      到底哪個才對？
+    </p>
+    <p>
+      這篇文章不推薦特定課程，而是幫你建立一套判斷框架——讓你知道孩子在哪個階段學什麼最有效，以及常見的誤區在哪。
+    </p>
+
+    <h2>先釐清一件事：「學 AI」不等於「學寫程式」</h2>
+    <p>
+      很多家長把「AI 教育」跟「程式教育」畫上等號，這其實是一個常見誤解。
+      寫程式是工具，AI 是概念——就像「學音樂」不等於「學看樂譜」一樣，樂譜只是其中一個技能。
+    </p>
+    <p>
+      真正的 AI 素養包含：<strong>理解 AI 的運作邏輯、知道它能做什麼不能做什麼、會用 AI 工具解決問題、以及批判性地思考 AI 的限制</strong>。
+      這些能力，不一定需要寫程式才能培養。
+    </p>
+
+    <div class="callout">
+      <p>💡 <strong>一個很有用的比喻</strong>：你不需要會修引擎才能學開車。同樣地，孩子不需要先精通 Python，才能開始學習 AI 思維。</p>
+    </div>
+
+    <h2>按年齡段的建議路徑</h2>
+    <p>以下是一個大致的方向，每個孩子的發展不同，僅供參考。</p>
+
+    <div class="stage-list">
+      <div class="stage">
+        <div class="stage-num s1">1</div>
+        <div class="stage-content">
+          <h4>國小低年級（6–8 歲）：邏輯思維與序列概念</h4>
+          <p>這個階段不急著碰「AI」，而是建立邏輯思維的地基。用 Scratch 做動畫、用桌遊練習策略思考，是很好的起點。重點是讓孩子感受到「給電腦下指令，它會照做」的成就感。</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num s2">2</div>
+        <div class="stage-content">
+          <h4>國小中高年級（9–12 歲）：程式邏輯 + AI 概念啟蒙</h4>
+          <p>這個階段適合接觸 Blockly 積木程式，開始理解「條件判斷」、「迴圈」等概念。同時可以引入 AI 工具的使用——讓孩子用 ChatGPT 做作業輔助、體驗圖片辨識，建立「AI 是工具」的直覺。</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num s3">3</div>
+        <div class="stage-content">
+          <h4>國中（13–15 歲）：動手做 AI 實驗</h4>
+          <p>這個階段可以開始接觸真正的 AI 訓練體驗——不一定要寫複雜程式，但可以用視覺化平台觀察機器學習的過程。強化學習、簡單的神經網路都是很好的入門材料。</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num s4">4</div>
+        <div class="stage-content">
+          <h4>高中（16 歲以上）：深入技術或應用專案</h4>
+          <p>有興趣的學生可以開始學 Python、研究真實的 AI 模型；對技術沒興趣但想用 AI 的，則可以聚焦在用 AI 工具完成專案——影片剪輯、內容創作、數據分析都是好方向。</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>常見誤區（家長最容易踩的坑）</h2>
+
+    <div class="myth-list">
+      <div class="myth">
+        <div class="myth-q">❌ 誤區一：「學 AI 就是要學 Python，越早越好」</div>
+        <div class="myth-a">Python 是工具，不是目的。對國小生來說，強迫學 Python 語法往往弄巧成拙，容易讓孩子對「寫程式」留下無聊或挫折的印象。更好的做法是先建立興趣，再在有需要的時候自然引入工具。</div>
+      </div>
+      <div class="myth">
+        <div class="myth-q">❌ 誤區二：「學會用 ChatGPT 就是學了 AI」</div>
+        <div class="myth-a">會用 AI 工具和理解 AI 是兩件事。工具技能重要，但更重要的是讓孩子理解「AI 為什麼這樣回答」、「它有什麼限制」——這才是真正的 AI 素養，而不只是「AI 使用者」。</div>
+      </div>
+      <div class="myth">
+        <div class="myth-q">❌ 誤區三：「孩子說無聊，換一個課程就好」</div>
+        <div class="myth-a">無聊通常不是課程的問題，而是「學的東西跟孩子的興趣沒有連結」。找到孩子有熱情的主題（遊戲、音樂、畫畫），然後把 AI 或程式作為「讓這個興趣更好玩的工具」引入，效果會好很多。</div>
+      </div>
+    </div>
+
+    <h2>選課時怎麼判斷品質？</h2>
+    <p>以下幾個指標，可以幫助你快速篩選課程：</p>
+
+    <div class="checklist">
+      <h4>✅ 好課程的特徵</h4>
+      <div class="check-item"><span class="check-icon">✓</span><span>每堂課有具體成果——孩子能帶走或展示的東西</span></div>
+      <div class="check-item"><span class="check-icon">✓</span><span>有「玩」的環節，不是純粹聽課或練習題目</span></div>
+      <div class="check-item"><span class="check-icon">✓</span><span>老師能用孩子聽得懂的語言解釋概念，不只是念投影片</span></div>
+      <div class="check-item"><span class="check-icon">✓</span><span>課程內容跟真實 AI 工具或場景有連結，不是封閉的玩具系統</span></div>
+      <div class="check-item"><span class="check-icon">✓</span><span>孩子下課後會主動跟你分享他做了什麼</span></div>
+    </div>
+
+    <h2>最後一個建議：讓孩子帶著「問題」去學</h2>
+    <p>
+      最有效的學習，通常從一個真實的好奇心出發——「為什麼 AI 會下棋？」「我能不能讓電腦幫我設計關卡？」「自動駕駛到底怎麼判斷前面有沒有人？」
+    </p>
+    <p>
+      當孩子帶著這些問題去學習，他不是在學「課程內容」，而是在找「自己問題的答案」。
+      這種學習狀態，比任何教學方法都更有效——也更符合 AI 教育真正應該培養的能力：<strong>主動探索、提問、迭代改進</strong>。
+    </p>
+    <p>
+      這，其實就是強化學習的精神。
+    </p>
+
+    <div class="related">
+      <h3>延伸閱讀</h3>
+      <div class="related-links">
+        <a href="/article-what-is-rl.html">→ 什麼是強化學習？用遊戲解釋 AI 如何自己學會玩</a>
+        <a href="/article-3d-printing-guide.html">→ 3D 列印是怎麼運作的？從設計到實體的完整流程</a>
+        <a href="/courses.html">→ 葉與月育樂實驗室課程總覽</a>
+      </div>
+    </div>
+  </article>
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-links">
+      <a href="/">LeafLune 首頁</a>
+      <a href="/courses.html">營隊課程</a>
+      <a href="https://reinroom.leaflune.org" target="_blank">ReinRoom</a>
+      <a href="/privacy.html">隱私權政策</a>
+    </div>
+    <div class="footer-copy">© 2025 LeafLune Edutainment Studio. All rights reserved.</div>
+  </div>
+</footer>
+</body>
+</html>

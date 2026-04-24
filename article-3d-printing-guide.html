@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>3D 列印是怎麼運作的？從設計到實體的完整流程 | LeafLune</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="3D 列印怎麼把電腦裡的模型變成真實物件？本文用完整圖解流程，從建模、切片到列印，說明每個步驟在做什麼，適合完全沒接觸過的初學者。" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#07090f; --bg2:#0d1117; --bg3:#111827;
+      --green:#3ddc84; --blue:#38bdf8; --gold:#fbbf24; --orange:#fb923c;
+      --text:#f1f5f9; --sub:#94a3b8; --dim:#475569; --border:rgba(255,255,255,0.08);
+      --max:720px;
+    }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif; -webkit-font-smoothing:antialiased; }
+    a { color:var(--blue); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .wrap { max-width:var(--max); margin:0 auto; padding:0 1.5rem; }
+
+    nav { position:sticky; top:0; z-index:99; background:rgba(7,9,15,0.9); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .nav-inner { display:flex; align-items:center; gap:2rem; height:56px; }
+    .nav-logo { display:flex; align-items:center; gap:.6rem; font-weight:700; font-size:1rem; color:var(--text); }
+    .nav-logo img { width:28px; height:28px; }
+    .nav-links { display:flex; gap:1.5rem; font-size:.875rem; color:var(--sub); margin-left:auto; }
+    .nav-links a { color:var(--sub); }
+    .nav-links a:hover { color:var(--text); text-decoration:none; }
+
+    .article-header { padding:4rem 0 2.5rem; }
+    .article-tag { display:inline-block; background:rgba(251,191,36,0.1); color:var(--gold); border:1px solid rgba(251,191,36,0.25); border-radius:99px; padding:.25rem .9rem; font-size:.78rem; margin-bottom:1.25rem; }
+    .article-header h1 { font-size:clamp(1.6rem,4vw,2.2rem); font-weight:800; line-height:1.3; margin-bottom:1rem; }
+    .article-meta { color:var(--dim); font-size:.82rem; display:flex; gap:1.5rem; flex-wrap:wrap; }
+
+    .article-body { padding:2rem 0 5rem; }
+    .article-body h2 { font-size:1.25rem; font-weight:700; margin:2.5rem 0 .75rem; }
+    .article-body h3 { font-size:1rem; font-weight:700; margin:1.75rem 0 .5rem; color:var(--gold); }
+    .article-body p { color:#cbd5e1; line-height:1.9; margin-bottom:1.1rem; font-size:.975rem; }
+    .article-body ul, .article-body ol { padding-left:1.5rem; margin-bottom:1.1rem; }
+    .article-body li { color:#cbd5e1; line-height:1.8; font-size:.975rem; margin-bottom:.4rem; }
+    .article-body strong { color:var(--text); }
+
+    .callout { background:var(--bg2); border-left:3px solid var(--gold); border-radius:0 10px 10px 0; padding:1rem 1.25rem; margin:1.5rem 0; }
+    .callout p { margin:0; color:var(--sub); font-size:.9rem; }
+
+    .flow { display:flex; flex-direction:column; gap:.75rem; margin:1.5rem 0; }
+    .flow-step { display:grid; grid-template-columns:56px 1fr; gap:1rem; align-items:flex-start; }
+    .flow-icon { width:56px; height:56px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+    .fi-1 { background:rgba(56,189,248,0.12); }
+    .fi-2 { background:rgba(61,220,132,0.12); }
+    .fi-3 { background:rgba(251,191,36,0.12); }
+    .fi-4 { background:rgba(251,146,60,0.12); }
+    .fi-5 { background:rgba(167,139,250,0.12); }
+    .flow-content h4 { font-size:.95rem; font-weight:700; margin-bottom:.3rem; }
+    .flow-content p { color:var(--sub); font-size:.875rem; line-height:1.7; margin:0; }
+    .flow-arrow { text-align:center; color:var(--dim); font-size:1.2rem; margin:-.2rem 0; padding-left:28px; }
+
+    .material-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin:1.5rem 0; }
+    .material-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.25rem; }
+    .material-card h4 { font-size:.9rem; font-weight:700; margin-bottom:.4rem; }
+    .material-card .pros { color:var(--green); font-size:.8rem; margin-bottom:.3rem; }
+    .material-card .cons { color:#f87171; font-size:.8rem; margin-bottom:.5rem; }
+    .material-card p { color:var(--sub); font-size:.82rem; line-height:1.6; margin:0; }
+
+    .tip-box { background:var(--bg3); border:1px solid rgba(251,191,36,0.2); border-radius:12px; padding:1.5rem; margin:1.5rem 0; }
+    .tip-box h4 { font-size:.9rem; color:var(--gold); font-weight:600; margin-bottom:.75rem; }
+    .tip-item { display:flex; gap:.75rem; margin-bottom:.5rem; font-size:.875rem; color:#cbd5e1; line-height:1.6; }
+    .tip-item:last-child { margin-bottom:0; }
+    .tip-num { color:var(--gold); font-weight:700; flex-shrink:0; }
+
+    .related { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:1.75rem; margin-top:3rem; }
+    .related h3 { font-size:.95rem; color:var(--sub); margin-bottom:1rem; }
+    .related-links { display:flex; flex-direction:column; gap:.6rem; }
+    .related-links a { color:var(--text); font-size:.9rem; }
+    .related-links a:hover { color:var(--blue); }
+
+    footer { border-top:1px solid var(--border); padding:2rem 0; }
+    .footer-inner { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .footer-links { display:flex; gap:1.5rem; font-size:.875rem; color:var(--sub); }
+    .footer-links a { color:var(--sub); }
+    .footer-links a:hover { color:var(--text); text-decoration:none; }
+    .footer-copy { font-size:.8rem; color:var(--dim); }
+
+    @media(max-width:540px) { .material-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-logo"><img src="/leaflune_logo_nobg.png" alt="LeafLune" />LeafLune</a>
+    <div class="nav-links">
+      <a href="/">首頁</a>
+      <a href="/courses.html">營隊課程</a>
+      <a href="https://reinroom.leaflune.org" target="_blank">ReinRoom</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="article-header">
+    <div class="article-tag">🖨️ 3D 列印入門</div>
+    <h1>3D 列印是怎麼運作的？<br>從設計到實體的完整流程</h1>
+    <div class="article-meta">
+      <span>📅 2025 年</span>
+      <span>✍️ LeafLune Edutainment</span>
+      <span>⏱ 閱讀約 6 分鐘</span>
+    </div>
+  </header>
+
+  <article class="article-body">
+    <p>
+      你有沒有想過，電腦裡一個純粹是數字構成的 3D 模型，是怎麼變成你手上那個摸得到的實體物件的？
+      3D 列印這個過程乍聽起來很神奇，但它的原理其實非常直觀——理解之後，你會覺得「原來就是這樣」。
+    </p>
+
+    <h2>3D 列印的核心概念：一層一層堆上去</h2>
+    <p>
+      傳統製造通常是「減法」——從一塊材料開始，切、削、挖，直到得到想要的形狀。
+      3D 列印是「加法」製造：從無到有，一層層把材料堆疊起來，直到整個物件成形。
+    </p>
+    <p>
+      每一層的厚度大概是 0.1 到 0.3 毫米——比一張紙薄。
+      一個 10 公分高的物件，可能是由幾百層甚至上千層疊起來的。
+    </p>
+
+    <div class="callout">
+      <p>💡 <strong>簡單的比喻</strong>：想像你用黏土做一座山。一般的做法是先揉一大坨，再雕出形狀。3D 列印的做法是：先鋪一層薄薄的黏土，確定形狀之後，再鋪第二層、第三層……一直往上堆，直到山的形狀完成。</p>
+    </div>
+
+    <h2>完整的五個步驟</h2>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon fi-1">🎨</div>
+        <div class="flow-content">
+          <h4>步驟一：3D 建模</h4>
+          <p>用 3D 建模軟體在電腦裡「畫出」你想要的物件。常見的軟體有 Tinkercad（適合初學者）、Blender（進階）、MagicaVoxel（像素風格）。這個步驟的成果是一個 .stl 或 .obj 格式的 3D 模型檔案。</p>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon fi-2">✂️</div>
+        <div class="flow-content">
+          <h4>步驟二：切片（Slicing）</h4>
+          <p>這是最關鍵也最容易被忽略的步驟。切片軟體（如 Cura）把 3D 模型切成幾百層薄片，然後計算「印表機的噴頭要怎麼移動，才能把每一層印出來」。這個步驟的成果是 .gcode 檔——印表機讀懂的語言。</p>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon fi-3">🖨️</div>
+        <div class="flow-content">
+          <h4>步驟三：列印</h4>
+          <p>把 .gcode 檔傳進印表機，按下開始。印表機的加熱噴頭把塑料絲融化，按照 gcode 的路徑，把每一層「畫」在上一層上面。根據物件大小，這個過程可能需要幾小時到幾十小時。</p>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon fi-4">🔧</div>
+        <div class="flow-content">
+          <h4>步驟四：後處理</h4>
+          <p>列印完成後，通常需要拆除支撐結構（如果有的話）、打磨表面、或者用特殊膠水組裝多個零件。這個步驟視你的需求而定，有些作品列印完就可以直接用。</p>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon fi-5">🎨</div>
+        <div class="flow-content">
+          <h4>步驟五：上色（選配）</h4>
+          <p>大多數印表機只能印單色。如果你想要彩色成品，可以在列印後用壓克力顏料、噴漆或特殊麥克筆上色。這個步驟也是很多學生最喜歡的環節——最後讓作品「活起來」的時刻。</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>最常用的材料：PLA 是什麼？</h2>
+    <p>
+      市面上有很多種 3D 列印材料，但初學者最常接觸的是 <strong>PLA（聚乳酸）</strong>。
+      PLA 的特別之處在於它是從植物澱粉提煉的，相對環保，而且列印時不需要特別高的溫度，比較安全。
+    </p>
+
+    <div class="material-grid">
+      <div class="material-card">
+        <h4>PLA（聚乳酸）</h4>
+        <div class="pros">✅ 適合初學者、顏色多樣、環保</div>
+        <div class="cons">⚠️ 不耐高溫（60°C 以上會軟化）</div>
+        <p>最常見的入門材料，適合絕大多數的教學與手工藝用途。</p>
+      </div>
+      <div class="material-card">
+        <h4>PETG（聚對苯二甲酸乙二酯）</h4>
+        <div class="pros">✅ 耐衝擊、稍微耐熱</div>
+        <div class="cons">⚠️ 比 PLA 難控制，容易拉絲</div>
+        <p>想要強度更高的功能性零件時使用，比 PLA 進階一些。</p>
+      </div>
+      <div class="material-card">
+        <h4>ABS（丙烯腈丁二烯苯乙烯）</h4>
+        <div class="pros">✅ 高強度、耐高溫</div>
+        <div class="cons">⚠️ 列印時有味道、容易翹曲</div>
+        <p>工業級應用較多，家用或教育場合較少使用。</p>
+      </div>
+      <div class="material-card">
+        <h4>TPU（熱塑性聚氨酯）</h4>
+        <div class="pros">✅ 柔軟有彈性、耐磨</div>
+        <div class="cons">⚠️ 列印速度要慢才不容易失敗</div>
+        <p>適合需要彈性的零件，例如手機殼、軟墊、玩具配件。</p>
+      </div>
+    </div>
+
+    <h2>切片設定會影響什麼？</h2>
+    <p>
+      切片軟體裡有很多設定，對初學者來說最重要的三個是：
+    </p>
+    <ul>
+      <li><strong>層高（Layer Height）</strong>：越小層高越細緻，但列印時間越長。0.2mm 是最常見的平衡點。</li>
+      <li><strong>填充率（Infill）</strong>：物件內部不是實心的——填充率決定內部有多少結構。20% 適合一般展示用途，50% 以上適合需要承重的零件。</li>
+      <li><strong>支撐（Support）</strong>：如果模型有懸空的部分，印表機需要先印一個暫時的「支架」撐住它，完成後再拆掉。</li>
+    </ul>
+
+    <h2>3D 列印在教育上的價值</h2>
+    <p>
+      對孩子來說，3D 列印最珍貴的不是技術本身，而是「把想法變成真實物件」的完整體驗。
+      這個過程強迫孩子思考三維空間、理解結構限制、處理「設計跟現實的落差」——這些能力在 2D 的繪圖或程式設計課程裡很難學到。
+    </p>
+    <p>
+      當孩子親手把自己設計的陀螺拿出印表機，然後拿去跟同學的陀螺對戰時——
+      那個瞬間的成就感，是任何考卷分數都替代不了的。
+    </p>
+    <p>
+      這也是為什麼葉與月的每一門<a href="/courses.html">3D 列印課程</a>，都堅持「每堂課都有實體成果帶回家」的設計原則。
+    </p>
+
+    <div class="tip-box">
+      <h4>🔧 初學者常犯的三個錯誤</h4>
+      <div class="tip-item"><span class="tip-num">1.</span><span>模型太薄——壁厚低於 1mm 的部分很難印出來，容易碎裂</span></div>
+      <div class="tip-item"><span class="tip-num">2.</span><span>忽略支撐——超過 45° 的懸空部分必須加支撐，否則會「塌下來」</span></div>
+      <div class="tip-item"><span class="tip-num">3.</span><span>急著拆——剛印完的作品還很脆，等完全冷卻再拆，比較不容易裂</span></div>
+    </div>
+
+    <div class="related">
+      <h3>延伸閱讀</h3>
+      <div class="related-links">
+        <a href="/article-what-is-rl.html">→ 什麼是強化學習？用遊戲解釋 AI 如何自己學會玩</a>
+        <a href="/article-kids-learn-ai.html">→ 孩子學 AI，要從哪裡開始？</a>
+        <a href="/camp-3d-print.html">→ 3D 列印玩具設計營課程介紹</a>
+      </div>
+    </div>
+  </article>
+</div>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-links">
+      <a href="/">LeafLune 首頁</a>
+      <a href="/courses.html">營隊課程</a>
+      <a href="https://reinroom.leaflune.org" target="_blank">ReinRoom</a>
+      <a href="/privacy.html">隱私權政策</a>
+    </div>
+    <div class="footer-copy">© 2025 LeafLune Edutainment Studio. All rights reserved.</div>
+  </div>
+</footer>
+</body>
+</html>
