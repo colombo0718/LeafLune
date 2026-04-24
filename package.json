@@ -1,0 +1,26 @@
+{
+  "name": "leaflune",
+  "version": "1.0.0",
+  "description": "> 學習變有趣，玩樂有價值。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colombo0718/LeafLune.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/colombo0718/LeafLune/issues"
+  },
+  "homepage": "https://github.com/colombo0718/LeafLune#readme",
+  "dependencies": {
+    "playwright-core": "^1.59.1"
+  }
+}

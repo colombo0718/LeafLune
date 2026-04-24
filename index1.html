@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>LeafLune 宇宙 | 讓學習變有趣，讓玩樂有價值。</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="LeafLune 宇宙由宣學習、LeafLune、Strategy Space 三大品牌構成。用遊戲化與 AI 重新定義學習的意義。" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #07090f;
+      --bg2:     #0d1117;
+      --bg3:     #111827;
+      --green:   #3ddc84;
+      --green2:  #22c55e;
+      --blue:    #38bdf8;
+      --blue2:   #0ea5e9;
+      --gold:    #fbbf24;
+      --gold2:   #f59e0b;
+      --pink:    #f472b6;
+      --purple:  #a78bfa;
+      --text:    #f1f5f9;
+      --sub:     #94a3b8;
+      --dim:     #475569;
+      --border:  rgba(255,255,255,0.08);
+      --max:     1080px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── PIXEL GRID UTIL ─── */
+    .dot-grid {
+      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* ─── CORNER BRACKET ─── */
+    .bracket {
+      position: relative;
+    }
+    .bracket::before, .bracket::after {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+    }
+    .bracket::before {
+      top: 0; left: 0;
+      border-top: 2px solid currentColor;
+      border-left: 2px solid currentColor;
+    }
+    .bracket::after {
+      bottom: 0; right: 0;
+      border-bottom: 2px solid currentColor;
+      border-right: 2px solid currentColor;
+    }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(7,9,15,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.6rem; }
+    .nav-logo img { width: 32px; height: 32px; object-fit: contain; }
+    .nav-logo-text { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.04em; }
+    .nav-logo-sub { font-size: 0.65rem; color: var(--sub); margin-top: 1px; }
+    .nav-links { display: flex; gap: 0.15rem; }
+    .nav-a {
+      font-size: 0.77rem; padding: 0.28rem 0.65rem;
+      border-radius: 6px; color: var(--sub);
+      transition: all 0.15s;
+    }
+    .nav-a:hover { color: var(--text); background: rgba(255,255,255,0.07); }
+
+    /* ─── BADGES / PILLS ─── */
+    .pill {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.2rem 0.65rem; border-radius: 999px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.03em;
+    }
+    .pill-green  { background: rgba(61,220,132,0.12);  color: var(--green);  border: 1px solid rgba(61,220,132,0.3); }
+    .pill-blue   { background: rgba(56,189,248,0.12);  color: var(--blue);   border: 1px solid rgba(56,189,248,0.3); }
+    .pill-gold   { background: rgba(251,191,36,0.12);  color: var(--gold);   border: 1px solid rgba(251,191,36,0.3); }
+    .pill-purple { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+    .pill-ghost  { background: rgba(255,255,255,0.05); color: var(--sub);    border: 1px solid var(--border); }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.62rem 1.3rem; border-radius: 8px;
+      font-size: 0.875rem; font-weight: 700;
+      cursor: pointer; transition: all 0.18s; border: none;
+      letter-spacing: 0.01em;
+    }
+    .btn-play {
+      background: linear-gradient(135deg, var(--green2), var(--blue2));
+      color: #fff;
+      box-shadow: 0 0 0 0 rgba(61,220,132,0.4);
+    }
+    .btn-play:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(61,220,132,0.4);
+    }
+    .btn-ghost {
+      background: transparent; color: var(--sub);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.35); }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 3rem;
+      align-items: center;
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -20%; left: -10%; width: 70%; height: 70%;
+      background: radial-gradient(ellipse at center, rgba(61,220,132,0.07), transparent 65%);
+      pointer-events: none;
+    }
+    .hero-glow-r {
+      position: absolute;
+      top: 10%; right: -5%; width: 55%; height: 60%;
+      background: radial-gradient(ellipse at center, rgba(56,189,248,0.07), transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-left { position: relative; z-index: 1; }
+
+    .hero-kicker {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.3rem 0.85rem; border-radius: 999px;
+      background: rgba(7,9,15,0.9); border: 1px solid rgba(255,255,255,0.18);
+      font-size: 0.73rem; color: var(--sub); margin-bottom: 1.5rem;
+    }
+    .hero-dot {
+      width: 7px; height: 7px; border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(61,220,132,0.22);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 4px rgba(61,220,132,0.22); }
+      50%      { box-shadow: 0 0 0 8px rgba(61,220,132,0.08); }
+    }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 5.5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.1rem;
+    }
+    .hero-title em { font-style: normal; }
+    .hero-title .w-green  { color: var(--green); }
+    .hero-title .w-blue   { color: var(--blue); }
+    .hero-title .w-gold   { color: var(--gold); }
+
+    .hero-mission {
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text);
+      border-left: 3px solid var(--green);
+      padding-left: 1rem;
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+    .hero-sub {
+      font-size: 0.9rem; color: var(--sub);
+      max-width: 480px; line-height: 1.72; margin-bottom: 1.75rem;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 2rem; }
+
+    .hero-brand-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .hero-brand-tag {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.75rem; border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--sub);
+    }
+    .hero-brand-tag img { width: 16px; height: 16px; object-fit: contain; }
+
+    /* HERO RIGHT — game stat card */
+    .hero-card {
+      position: relative; z-index: 1;
+      background: var(--bg2);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 1.5rem;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .hero-card-title {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--dim); text-transform: uppercase; margin-bottom: 1.1rem;
+    }
+    .stat-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+    .stat-row:last-of-type { border-bottom: none; }
+    .stat-label { color: var(--sub); }
+    .stat-val { font-weight: 700; }
+    .stat-bar-wrap {
+      flex: 1; height: 5px; margin: 0 0.75rem;
+      background: rgba(255,255,255,0.07); border-radius: 999px; overflow: hidden;
+    }
+    .stat-bar { height: 100%; border-radius: 999px; }
+
+    .hero-card-footer {
+      margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--sub); line-height: 1.55;
+    }
+    .hero-card-footer strong { color: var(--text); }
+
+    /* ════════════════════════════════
+       BRAND CORE — big statements
+    ════════════════════════════════ */
+    .core { padding: 0; }
+
+    .core-item {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    .core-item:last-child { border-bottom: none; }
+
+    .core-label {
+      padding-top: 0.35rem;
+    }
+    .core-label-en {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--dim); margin-bottom: 0.4rem;
+    }
+    .core-label-zh {
+      font-size: 1.1rem; font-weight: 800;
+    }
+
+    .core-quote {
+      font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.85rem;
+    }
+    .core-desc {
+      font-size: 0.9rem; color: var(--sub); line-height: 1.75; max-width: 560px;
+    }
+
+    /* ════════════════════════════════
+       ORIGIN STORY
+    ════════════════════════════════ */
+    .origin {
+      padding: 5rem 0;
+      background: var(--bg2);
+    }
+    .origin-sec-label { margin-bottom: 0.65rem; display: inline-block; }
+    .origin-title { font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.6rem; }
+    .origin-sub { font-size: 0.9rem; color: var(--sub); max-width: 520px; line-height: 1.7; }
+
+    .origin-duel {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0; margin-top: 2.5rem;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .origin-half {
+      padding: 2.25rem 2rem;
+      position: relative;
+    }
+    .origin-half-leaf {
+      background: radial-gradient(circle at 80% 80%, rgba(61,220,132,0.12), transparent 60%);
+      border-right: 1px solid var(--border);
+    }
+    .origin-half-lune {
+      background: radial-gradient(circle at 20% 80%, rgba(56,189,248,0.12), transparent 60%);
+    }
+    .origin-half-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 0.65rem; }
+    .origin-half-name { font-size: 2rem; font-weight: 900; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+    .origin-half-name .g { color: var(--green); }
+    .origin-half-name .b { color: var(--blue); }
+    .origin-half-sub { font-size: 0.8rem; color: var(--sub); margin-bottom: 1rem; }
+    .origin-half p { font-size: 0.85rem; color: var(--sub); line-height: 1.7; }
+    .origin-half p strong { color: var(--text); }
+    .origin-half-result { margin-top: 1rem; font-size: 0.82rem; font-weight: 700; }
+
+    .origin-equals {
+      margin-top: 2rem; padding: 1.75rem 2rem;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.04), transparent);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; text-align: center;
+    }
+    .origin-equals-big { font-size: 2.5rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .origin-equals-big .g { color: var(--green); }
+    .origin-equals-big .b { color: var(--blue); }
+    .origin-equals p { font-size: 0.88rem; color: var(--sub); line-height: 1.7; max-width: 500px; margin: 0 auto 1rem; }
+    .origin-tier-row { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+
+    /* ════════════════════════════════
+       THREE BRANDS — character select
+    ════════════════════════════════ */
+    .brands { padding: 5rem 0; }
+    .brands-title { font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .brands-sub { font-size: 0.9rem; color: var(--sub); max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem; }
+
+    .brand-select {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem;
+    }
+    .brand-char {
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .brand-char:hover { transform: translateY(-4px); }
+    .brand-char-banner {
+      padding: 1.25rem 1.5rem 1rem;
+      display: flex; align-items: center; gap: 0.85rem;
+    }
+    .brand-char-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      flex-shrink: 0;
+    }
+    .brand-char-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .brand-char-class { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.15rem; }
+    .brand-char-name { font-size: 1.1rem; font-weight: 800; }
+    .brand-char-name-en { font-size: 0.72rem; opacity: 0.6; margin-top: 0.1rem; }
+
+    .brand-char-body {
+      padding: 0 1.5rem 1.4rem;
+      background: rgba(0,0,0,0.25);
+    }
+    .brand-char-desc { font-size: 0.83rem; color: var(--sub); line-height: 1.65; margin-bottom: 1rem; padding-top: 1rem; }
+
+    .char-stats { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1rem; }
+    .char-stat { display: flex; align-items: center; gap: 0.5rem; }
+    .char-stat-name { font-size: 0.68rem; color: var(--dim); width: 28px; flex-shrink: 0; }
+    .char-stat-bar-bg { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 999px; overflow: hidden; }
+    .char-stat-bar { height: 100%; border-radius: 999px; }
+    .char-stat-val { font-size: 0.68rem; font-weight: 700; width: 20px; text-align: right; flex-shrink: 0; }
+
+    .brand-char-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 1rem; }
+    .brand-char-slogan { font-size: 0.78rem; font-weight: 600; font-style: italic; opacity: 0.85; }
+
+    /* brand color themes */
+    .bc-green .brand-char-banner { background: rgba(61,220,132,0.1); }
+    .bc-green .brand-char-icon { background: rgba(61,220,132,0.15); border: 1px solid rgba(61,220,132,0.3); }
+    .bc-green:hover { box-shadow: 0 12px 40px rgba(61,220,132,0.15); border-color: rgba(61,220,132,0.3); }
+    .bc-green .char-stat-bar { background: var(--green); }
+    .bc-green .brand-char-slogan { color: var(--green); }
+
+    .bc-blue .brand-char-banner { background: rgba(56,189,248,0.1); }
+    .bc-blue .brand-char-icon { background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3); }
+    .bc-blue:hover { box-shadow: 0 12px 40px rgba(56,189,248,0.15); border-color: rgba(56,189,248,0.3); }
+    .bc-blue .char-stat-bar { background: var(--blue); }
+    .bc-blue .brand-char-slogan { color: var(--blue); }
+
+    .bc-gold .brand-char-banner { background: rgba(251,191,36,0.1); }
+    .bc-gold .brand-char-icon { background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.3); }
+    .bc-gold:hover { box-shadow: 0 12px 40px rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.3); }
+    .bc-gold .char-stat-bar { background: var(--gold); }
+    .bc-gold .brand-char-slogan { color: var(--gold); }
+
+    /* ════════════════════════════════
+       JOURNEY — game path
+    ════════════════════════════════ */
+    .journey { padding: 5rem 0; background: var(--bg2); }
+    .journey-title { font-size: clamp(1.7rem,3vw,2.3rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .journey-sub { font-size: 0.9rem; color: var(--sub); max-width: 520px; line-height: 1.7; margin-bottom: 3rem; }
+
+    .path-wrap {
+      position: relative;
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 0;
+    }
+    /* connecting line */
+    .path-wrap::before {
+      content: '';
+      position: absolute;
+      top: 40px; left: calc(12.5% - 1px); right: calc(12.5% - 1px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--gold), var(--purple));
+      z-index: 0;
+    }
+
+    .path-node {
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; z-index: 1; padding: 0 0.5rem;
+    }
+    .path-circle {
+      width: 80px; height: 80px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.75rem; font-weight: 900;
+      border: 3px solid;
+      background: var(--bg2);
+      margin-bottom: 1.25rem;
+      transition: transform 0.2s;
+      position: relative;
+    }
+    .path-node:hover .path-circle { transform: scale(1.1); }
+
+    .path-circle.c-green  { color: var(--green);  border-color: var(--green);  box-shadow: 0 0 0 8px rgba(61,220,132,0.1); }
+    .path-circle.c-blue   { color: var(--blue);   border-color: var(--blue);   box-shadow: 0 0 0 8px rgba(56,189,248,0.1); }
+    .path-circle.c-gold   { color: var(--gold);   border-color: var(--gold);   box-shadow: 0 0 0 8px rgba(251,191,36,0.1); }
+    .path-circle.c-purple { color: var(--purple); border-color: var(--purple); box-shadow: 0 0 0 8px rgba(167,139,250,0.1); }
+
+    .path-node h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; text-align: center; }
+    .path-node p  { font-size: 0.78rem; color: var(--sub); line-height: 1.55; text-align: center; }
+    .path-node .step-pill { margin-top: 0.6rem; }
+
+    /* ════════════════════════════════
+       PRODUCTS — item cards
+    ════════════════════════════════ */
+    .products { padding: 5rem 0; }
+    .products-title { font-size: clamp(1.7rem,3vw,2.3rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .products-sub { font-size: 0.9rem; color: var(--sub); max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem; }
+
+    .items-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.15rem;
+    }
+    .item-card {
+      border-radius: 12px; border: 1px solid var(--border);
+      background: var(--bg2); overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .item-card:hover { transform: translateY(-4px); }
+
+    .item-top-bar { height: 4px; }
+    .item-top-bar.g { background: linear-gradient(90deg, var(--green2), var(--green)); }
+    .item-top-bar.b { background: linear-gradient(90deg, var(--blue2), var(--blue)); }
+    .item-top-bar.gold { background: linear-gradient(90deg, var(--gold2), var(--gold)); }
+
+    .item-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .item-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
+    .item-emoji { font-size: 1.75rem; line-height: 1; }
+    .item-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.18rem; }
+    .item-card-en { font-size: 0.7rem; color: var(--dim); margin-bottom: 0.6rem; }
+    .item-card p { font-size: 0.81rem; color: var(--sub); line-height: 1.62; margin-bottom: 0.75rem; flex: 1; }
+    .item-feats { list-style: none; padding: 0; border-top: 1px solid var(--border); padding-top: 0.7rem; margin-top: auto; }
+    .item-feats li { font-size: 0.75rem; color: var(--dim); padding: 0.15rem 0; display: flex; gap: 0.4rem; align-items: flex-start; }
+    .item-feats li::before { content: '▸'; font-size: 0.65rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .g-accent::before { color: var(--green); }
+    .b-accent::before { color: var(--blue); }
+    .gold-accent::before { color: var(--gold); }
+
+    /* ════════════════════════════════
+       GAMEGEEK — skill tree
+    ════════════════════════════════ */
+    .gg { padding: 5rem 0; background: var(--bg2); }
+    .gg-header { margin-bottom: 2.5rem; }
+    .gg-title { font-size: clamp(1.7rem,3vw,2.3rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .gg-sub { font-size: 0.9rem; color: var(--sub); max-width: 520px; line-height: 1.7; }
+
+    .gg-layout { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; }
+
+    .skill-tree { display: flex; flex-direction: column; gap: 0; }
+    .skill-node {
+      display: flex; gap: 1rem; padding: 1.25rem;
+      border-left: 2px solid var(--border);
+      margin-left: 24px;
+      position: relative;
+    }
+    .skill-node::before {
+      content: '';
+      position: absolute;
+      left: -9px; top: 1.6rem;
+      width: 16px; height: 16px;
+      border-radius: 999px;
+      background: var(--bg2);
+      border: 2px solid var(--border);
+    }
+    .skill-node.active::before { border-color: var(--blue); background: rgba(56,189,248,0.2); box-shadow: 0 0 0 4px rgba(56,189,248,0.1); }
+    .skill-node.active { border-left-color: rgba(56,189,248,0.3); }
+
+    .skill-medal { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .skill-node h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .skill-node p { font-size: 0.8rem; color: var(--sub); line-height: 1.58; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+
+    .gg-aside { display: flex; flex-direction: column; gap: 1rem; }
+    .gg-aside-card {
+      border-radius: 12px; padding: 1.4rem;
+      border: 1px solid var(--border);
+    }
+    .gg-aside-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .gg-aside-card p { font-size: 0.81rem; color: var(--sub); line-height: 1.6; }
+    .gg-aside-card .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.75rem; }
+
+    .gg-arrow { text-align: center; font-size: 1.2rem; color: var(--dim); }
+
+    .gg-summary {
+      padding: 1.1rem 1.25rem; border-radius: 10px;
+      border: 1px dashed rgba(56,189,248,0.25);
+      background: rgba(56,189,248,0.04);
+      font-size: 0.82rem; color: var(--sub); line-height: 1.65;
+    }
+    .gg-summary strong { color: var(--blue); }
+
+    /* ════════════════════════════════
+       BUSINESS MODEL
+    ════════════════════════════════ */
+    .biz { padding: 5rem 0; }
+    .biz-title { font-size: clamp(1.7rem,3vw,2.3rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .biz-sub { font-size: 0.9rem; color: var(--sub); max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem; }
+
+    .biz-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.15rem; }
+    .biz-card {
+      border-radius: 12px; padding: 1.5rem;
+      border: 1px solid var(--border); background: var(--bg2);
+      transition: transform 0.2s;
+    }
+    .biz-card:hover { transform: translateY(-3px); }
+    .biz-icon { font-size: 1.7rem; margin-bottom: 0.7rem; }
+    .biz-card h3 { font-size: 0.97rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .biz-card .biz-type { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .biz-card p { font-size: 0.82rem; color: var(--sub); line-height: 1.62; margin-bottom: 0.8rem; }
+    .biz-list { list-style: none; padding: 0; border-top: 1px solid var(--border); padding-top: 0.7rem; }
+    .biz-list li { font-size: 0.76rem; color: var(--dim); padding: 0.16rem 0; }
+    .biz-list li::before { content: '→ '; }
+
+    .biz-formula {
+      margin-top: 1.75rem; padding: 1.5rem;
+      border-radius: 12px; border: 1px solid var(--border);
+      background: var(--bg2);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 0.5rem 1.25rem; text-align: center;
+    }
+    .formula-item { min-width: 180px; }
+    .formula-item-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .formula-item p { font-size: 0.78rem; color: var(--sub); line-height: 1.55; }
+    .formula-sep { font-size: 1.35rem; color: var(--dim); }
+
+    /* ════════════════════════════════
+       CTA
+    ════════════════════════════════ */
+    .cta {
+      padding: 6rem 0; text-align: center;
+      background:
+        radial-gradient(ellipse 60% 70% at 50% 50%, rgba(61,220,132,0.07), rgba(56,189,248,0.05), transparent),
+        var(--bg2);
+      position: relative; overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; z-index: 1; }
+    .cta-kicker { display: inline-block; margin-bottom: 1.1rem; }
+    .cta-title { font-size: clamp(2rem,4vw,3.2rem); font-weight: 900; line-height: 1.1; margin-bottom: 0.9rem; letter-spacing: -0.025em; }
+    .cta-sub { font-size: 0.92rem; color: var(--sub); max-width: 440px; margin: 0 auto 2rem; line-height: 1.72; }
+    .cta-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 3rem; }
+    .cta-stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+    .cta-stat-n { font-size: 2rem; font-weight: 900; }
+    .cta-stat-l { font-size: 0.75rem; color: var(--sub); margin-top: 0.1rem; }
+
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    footer {
+      background: #04060b;
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 1.5rem;
+    }
+    .foot-inner {
+      max-width: var(--max); margin: 0 auto;
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 0.75rem;
+    }
+    .foot-brand { display: flex; align-items: center; gap: 0.55rem; }
+    .foot-brand img { width: 26px; height: 26px; object-fit: contain; }
+    .foot-brand-name { font-size: 0.85rem; font-weight: 800; }
+    .foot-brand-sub { font-size: 0.65rem; color: var(--dim); margin-top: 1px; }
+    .foot-links { display: flex; gap: 1.25rem; font-size: 0.76rem; color: var(--sub); }
+    .foot-links a:hover { color: var(--text); }
+    .foot-copy { font-size: 0.72rem; color: var(--dim); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; padding: 4rem 0 3rem; min-height: auto; }
+      .hero-card { display: none; }
+      .core-item { grid-template-columns: 1fr; gap: 0.75rem; }
+      .brand-select { grid-template-columns: 1fr; }
+      .path-wrap { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .path-wrap::before { display: none; }
+      .items-grid { grid-template-columns: repeat(2,1fr); }
+      .gg-layout { grid-template-columns: 1fr; }
+      .biz-grid { grid-template-columns: 1fr; }
+      .origin-duel { grid-template-columns: 1fr; }
+      .origin-half-leaf { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    @media (max-width: 580px) {
+      .nav-links { display: none; }
+      .items-grid { grid-template-columns: 1fr; }
+      .path-wrap { grid-template-columns: 1fr; }
+      .cta-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img src="leaflune_logo_nobg.png" alt="LeafLune" />
+      <div>
+        <div class="nav-logo-text">LeafLune</div>
+        <div class="nav-logo-sub">教育 · 認證 · 競賽宇宙</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#core"     class="nav-a">品牌核心</a>
+      <a href="#story"    class="nav-a">品牌故事</a>
+      <a href="#brands"   class="nav-a">三大品牌</a>
+      <a href="#journey"  class="nav-a">成長旅程</a>
+      <a href="#products" class="nav-a">產品</a>
+      <a href="#gamegeek" class="nav-a">GameGeek</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section>
+  <div class="wrap">
+    <div class="hero dot-grid">
+      <div class="hero-glow-r"></div>
+
+      <div class="hero-left">
+        <div class="hero-kicker">
+          <span class="hero-dot"></span>
+          LeafLune Brand Universe · 2025
+        </div>
+        <h1 class="hero-title">
+          讓<em class="w-green">學習</em>變有趣，<br>
+          讓<em class="w-blue">玩樂</em>有價值。
+        </h1>
+        <p class="hero-mission">
+          讓學習應該充滿動機，而不是壓力；<br>
+          玩樂應該能帶來成長，而不是浪費時間。<br>
+          我們用遊戲化與 AI，重新定義「學習」的意義。
+        </p>
+        <p class="hero-sub">
+          LeafLune 宇宙由三個品牌構成——
+          <strong>宣學習</strong>讓你開心學，<strong>LeafLune</strong> 讓你自豪晒，<strong>策略空間</strong>讓你上場比。
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-play" onclick="document.getElementById('core').scrollIntoView({behavior:'smooth'})">▶ 進入宇宙</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">看產品生態</button>
+        </div>
+        <div class="hero-brand-row">
+          <div class="hero-brand-tag"><img src="XuanXuexi_emoji.png" alt="" /> 宣學習 XuanXuexi</div>
+          <div class="hero-brand-tag"><img src="LeafLune_emoji.png"  alt="" /> LeafLune</div>
+          <div class="hero-brand-tag"><img src="StrategySpace_emoji.png" alt="" /> Strategy Space</div>
+        </div>
+      </div>
+
+      <!-- Game stat card -->
+      <div class="hero-card">
+        <div class="hero-card-title">// UNIVERSE STATUS</div>
+
+        <div class="stat-row">
+          <span class="stat-label">教育力</span>
+          <div class="stat-bar-wrap"><div class="stat-bar" style="width:88%;background:var(--green);"></div></div>
+          <span class="stat-val" style="color:var(--green);">88</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">技術深度</span>
+          <div class="stat-bar-wrap"><div class="stat-bar" style="width:92%;background:var(--blue);"></div></div>
+          <span class="stat-val" style="color:var(--blue);">92</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">競技強度</span>
+          <div class="stat-bar-wrap"><div class="stat-bar" style="width:80%;background:var(--gold);"></div></div>
+          <span class="stat-val" style="color:var(--gold);">80</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">遊戲感</span>
+          <div class="stat-bar-wrap"><div class="stat-bar" style="width:95%;background:var(--purple);"></div></div>
+          <span class="stat-val" style="color:var(--purple);">95</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">品牌力</span>
+          <div class="stat-bar-wrap"><div class="stat-bar" style="width:78%;background:var(--pink);"></div></div>
+          <span class="stat-val" style="color:var(--pink);">78</span>
+        </div>
+
+        <div class="hero-card-footer">
+          <strong>3 大品牌 · 6+ 產品 · 1 個成長宇宙</strong><br>
+          從學習到競技，LeafLune 是一整條成長旅程，不只是一個平台。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BRAND CORE — Mission / Vision / Value ═══ -->
+<section id="core">
+  <div class="wrap">
+    <div class="core">
+
+      <div class="core-item">
+        <div class="core-label">
+          <div class="core-label-en">Mission</div>
+          <div class="core-label-zh" style="color:var(--green);">使命</div>
+        </div>
+        <div>
+          <div class="core-quote">讓學習變有趣，讓玩樂有價值。</div>
+          <p class="core-desc">
+            學習應該充滿動機，而不是壓力；<br>
+            玩樂應該能帶來成長，而不是浪費時間。<br>
+            我們用遊戲化與 AI，重新定義「學習」的意義。
+          </p>
+        </div>
+      </div>
+
+      <div class="core-item">
+        <div class="core-label">
+          <div class="core-label-en">Vision</div>
+          <div class="core-label-zh" style="color:var(--blue);">願景</div>
+        </div>
+        <div>
+          <div class="core-quote">建構一個以 AI 競技驅動的成長型社會引擎。</div>
+          <p class="core-desc">
+            LeafLune 不只提供教材或工具，<br>
+            我們正打造一個能讓人人主動學習、持續成長的 AI 遊戲宇宙。<br>
+            讓人類與 AI 在合作與競技中共同進化，形成一種推動社會前進的新力量。
+          </p>
+        </div>
+      </div>
+
+      <div class="core-item">
+        <div class="core-label">
+          <div class="core-label-en">Value</div>
+          <div class="core-label-zh" style="color:var(--gold);">價值觀</div>
+        </div>
+        <div>
+          <div class="core-quote">點燃動機，就能打開自主學習的開關。</div>
+          <p class="core-desc">
+            我們相信：只要讓學生願意開始，就能讓他們自己走得更遠。<br>
+            LeafLune 的所有產品——卡牌、桌遊、課程、AI 平台、遊戲——<br>
+            都圍繞著同一個原則：<strong style="color:var(--text);">動機才是最強的教師，自主才是最深的學習。</strong>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ORIGIN STORY ═══ -->
+<section id="story" class="origin">
+  <div class="wrap">
+    <div class="origin-sec-label pill pill-blue">🌙 品牌起源</div>
+    <h2 class="origin-title">葉與月，是一段早就注定的宇宙。</h2>
+    <p class="origin-sub">LeafLune 不是設計出來的名字。它是兩個人的相遇，在不知不覺中，長成了一個完整的教育宇宙。</p>
+
+    <div class="origin-duel">
+      <div class="origin-half origin-half-leaf">
+        <div class="origin-half-label">🌿 Leaf · 葉</div>
+        <div class="origin-half-name"><span class="g">她 · Xuân</span></div>
+        <div class="origin-half-sub">越南語 Xuân = 春天</div>
+        <p>春天讓種子萌芽，讓葉子長出。她代表的是教育、成長與啟蒙，是所有學習的根基所在。<br><br>名字帶來了 <strong>Leaf（葉）</strong>，Leaf 長成了 <strong>宣學習</strong>。</p>
+        <div class="origin-half-result" style="color:var(--green);">Leaf → 宣學習 → 地 · 樂 · 教育</div>
+      </div>
+      <div class="origin-half origin-half-lune">
+        <div class="origin-half-label">🌕 Lune · 月</div>
+        <div class="origin-half-name"><span class="b">你 · 太空</span></div>
+        <div class="origin-half-sub">Space 是策略，Lune 是月亮</div>
+        <p>月亮是太空的守望者，也是策略的象徵。代表技術、系統與競技，是對戰與挑戰的最高舞台。<br><br>名字帶來了 <strong>Lune（月）</strong>，Lune 成為了 <strong>策略空間</strong>。</p>
+        <div class="origin-half-result" style="color:var(--blue);">Lune → 策略空間 → 天 · 比 · 競賽</div>
+      </div>
+    </div>
+
+    <div class="origin-equals">
+      <div class="origin-equals-big"><span class="g">Leaf</span> <span style="color:var(--dim);">+</span> <span class="b">Lune</span> <span style="color:var(--dim);">=</span> LeafLune 宇宙</div>
+      <p>你們的相遇，讓葉與月形成了宇宙的中心。<strong>天地人 × 樂晒比 × 教育認證競賽</strong>，三層同時對位——這不是設計出來的架構，而是自然長出來的宿命。</p>
+      <div class="origin-tier-row">
+        <span class="pill pill-green">地 · 樂 · 宣學習</span>
+        <span style="color:var(--dim);">·</span>
+        <span class="pill pill-blue">人 · 晒 · LeafLune</span>
+        <span style="color:var(--dim);">·</span>
+        <span class="pill pill-gold">天 · 比 · 策略空間</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THREE BRANDS — character select ═══ -->
+<section id="brands" class="brands">
+  <div class="wrap">
+    <div class="pill pill-ghost" style="margin-bottom:0.65rem;">🪐 三大品牌宇宙</div>
+    <h2 class="brands-title">選擇你的角色。</h2>
+    <p class="brands-sub">三個品牌，三種角色。每一個都有專屬的成長路線、產品線與心理價值，共同構成一個完整的教育宇宙。</p>
+
+    <div class="brand-select">
+
+      <!-- 宣學習 -->
+      <div class="brand-char bc-green">
+        <div class="brand-char-banner">
+          <div class="brand-char-icon"><img src="XuanXuexi_emoji.png" alt="宣學習" /></div>
+          <div>
+            <div class="brand-char-class">Class: 教育 · 地 · 樂</div>
+            <div class="brand-char-name">宣學習</div>
+            <div class="brand-char-name-en">XuanXuexi · 孩子成長的起點</div>
+          </div>
+        </div>
+        <div class="brand-char-body">
+          <p class="brand-char-desc">面向老師、家長與學校的教育品牌。名稱源自越南語 Xuân（春天），象徵萌芽與啟蒙。這裡是所有課程、教案與教具的對外入口。</p>
+          <div class="char-stats">
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">教學</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:95%"></div></div>
+              <span class="char-stat-val" style="color:var(--green);">95</span>
+            </div>
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">趣味</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:88%"></div></div>
+              <span class="char-stat-val" style="color:var(--green);">88</span>
+            </div>
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">實體</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:75%"></div></div>
+              <span class="char-stat-val" style="color:var(--green);">75</span>
+            </div>
+          </div>
+          <div class="brand-char-tags">
+            <span class="pill pill-ghost">語言卡牌</span>
+            <span class="pill pill-ghost">ReinRoom</span>
+            <span class="pill pill-ghost">STEM 課程</span>
+            <span class="pill pill-ghost">親子桌遊</span>
+          </div>
+          <div class="brand-char-slogan">「宣學習，讓孩子真正喜歡學習。」</div>
+        </div>
+      </div>
+
+      <!-- LeafLune -->
+      <div class="brand-char bc-blue">
+        <div class="brand-char-banner">
+          <div class="brand-char-icon"><img src="LeafLune_emoji.png" alt="LeafLune" /></div>
+          <div>
+            <div class="brand-char-class">Class: 認證 · 人 · 晒</div>
+            <div class="brand-char-name">LeafLune</div>
+            <div class="brand-char-name-en">葉與月 · 身份與情緒價值</div>
+          </div>
+        </div>
+        <div class="brand-char-body">
+          <p class="brand-char-desc">承載所有參與者的身份認同與情緒價值。不是冰冷的證書，而是讓每個人可以自豪晒出來的成長足跡、成就徽章與作品集。</p>
+          <div class="char-stats">
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">情感</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:98%"></div></div>
+              <span class="char-stat-val" style="color:var(--blue);">98</span>
+            </div>
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">品牌</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:90%"></div></div>
+              <span class="char-stat-val" style="color:var(--blue);">90</span>
+            </div>
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">社群</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:82%"></div></div>
+              <span class="char-stat-val" style="color:var(--blue);">82</span>
+            </div>
+          </div>
+          <div class="brand-char-tags">
+            <span class="pill pill-ghost">成就徽章</span>
+            <span class="pill pill-ghost">作品集</span>
+            <span class="pill pill-ghost">身份認證</span>
+            <span class="pill pill-ghost">社群連結</span>
+          </div>
+          <div class="brand-char-slogan">「LeafLune，讓你自豪地被看見。」</div>
+        </div>
+      </div>
+
+      <!-- Strategy Space -->
+      <div class="brand-char bc-gold">
+        <div class="brand-char-banner">
+          <div class="brand-char-icon"><img src="StrategySpace_emoji.png" alt="Strategy Space" /></div>
+          <div>
+            <div class="brand-char-class">Class: 競賽 · 天 · 比</div>
+            <div class="brand-char-name">策略空間</div>
+            <div class="brand-char-name-en">Strategy Space · 競技最高舞台</div>
+          </div>
+        </div>
+        <div class="brand-char-body">
+          <p class="brand-char-desc">所有對戰、比賽與競技的總品牌。對外是「策略對戰平台」，對內是強化學習（RL）的 strategy space，是上場用策略說話的地方。</p>
+          <div class="char-stats">
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">競技</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:96%"></div></div>
+              <span class="char-stat-val" style="color:var(--gold);">96</span>
+            </div>
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">AI</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:92%"></div></div>
+              <span class="char-stat-val" style="color:var(--gold);">92</span>
+            </div>
+            <div class="char-stat">
+              <span class="char-stat-name" style="font-size:0.68rem; color:var(--dim);">策略</span>
+              <div class="char-stat-bar-bg"><div class="char-stat-bar" style="width:89%"></div></div>
+              <span class="char-stat-val" style="color:var(--gold);">89</span>
+            </div>
+          </div>
+          <div class="brand-char-tags">
+            <span class="pill pill-ghost">GameGeek</span>
+            <span class="pill pill-ghost">CubicCraft</span>
+            <span class="pill pill-ghost">RL 擂台</span>
+            <span class="pill pill-ghost">賽事系統</span>
+          </div>
+          <div class="brand-char-slogan">「上場，用策略說話。」</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ JOURNEY — game path ═══ -->
+<section id="journey" class="journey">
+  <div class="wrap">
+    <div class="pill pill-ghost" style="margin-bottom:0.65rem;">🌟 成長旅程</div>
+    <h2 class="journey-title">樂 → 晒 → 比 → 再回到樂。</h2>
+    <p class="journey-sub">
+      LeafLune 宇宙的每一條路都圍繞著同一個循環：從好玩的學習開始，到值得晒出的成果，最後走上競技舞台，帶著新動機重新出發。
+    </p>
+
+    <div class="path-wrap">
+      <div class="path-node">
+        <div class="path-circle c-green">樂</div>
+        <h3>在宣學習中開心學</h3>
+        <p>透過 ReinRoom、語言卡牌與桌遊，把課程變成任務，把練習變成闖關。</p>
+        <div class="step-pill"><span class="pill pill-green" style="font-size:0.67rem;">宣學習 XuanXuexi</span></div>
+      </div>
+      <div class="path-node">
+        <div class="path-circle c-blue">晒</div>
+        <h3>在 LeafLune 裡自豪晒</h3>
+        <p>成果、徽章與作品整理成可以展示的成長故事，讓努力被看見、被記住。</p>
+        <div class="step-pill"><span class="pill pill-blue" style="font-size:0.67rem;">LeafLune 認證</span></div>
+      </div>
+      <div class="path-node">
+        <div class="path-circle c-gold">比</div>
+        <h3>在策略空間裡勇敢比</h3>
+        <p>帶著積累的技能與策略，在 GameGeek 和 CubicCraft 的競技舞台一較高下。</p>
+        <div class="step-pill"><span class="pill pill-gold" style="font-size:0.67rem;">Strategy Space</span></div>
+      </div>
+      <div class="path-node">
+        <div class="path-circle c-purple">↺</div>
+        <h3>帶著新動機再出發</h3>
+        <p>競技帶來新目標，以更高強度回到學習起點，形成永動的成長引擎。</p>
+        <div class="step-pill"><span class="pill pill-purple" style="font-size:0.67rem;">動機即是引擎</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCTS — item cards ═══ -->
+<section id="products" class="products">
+  <div class="wrap">
+    <div class="pill pill-ghost" style="margin-bottom:0.65rem;">🧩 產品生態系</div>
+    <h2 class="products-title">每一個產品，都是宇宙的一塊拼圖。</h2>
+    <p class="products-sub">從桌上的卡牌到螢幕裡的 AI 平台，LeafLune 的每個產品都圍繞著同一個原則：讓人想要主動再玩一次。</p>
+
+    <div class="items-grid">
+
+      <div class="item-card">
+        <div class="item-top-bar g"></div>
+        <div class="item-body">
+          <div class="item-header">
+            <div class="item-emoji">🏫</div>
+            <span class="pill pill-green">宣學習</span>
+          </div>
+          <h3>ReinRoom</h3>
+          <div class="item-card-en">強化教室 · Reinforcement Room</div>
+          <p>把教室變成任務系統。老師將課程拆成關卡與獎勵，把強化學習（RL）的 reward 思維帶進實際教學現場。</p>
+          <ul class="item-feats g-accent">
+            <li>為每個班建立任務地圖與關卡樹</li>
+            <li>追蹤學生嘗試次數與進步軌跡</li>
+            <li>可視化 reward 回饋機制</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="item-top-bar b"></div>
+        <div class="item-body">
+          <div class="item-header">
+            <div class="item-emoji">🎮</div>
+            <span class="pill pill-blue">策略空間</span>
+          </div>
+          <h3>GameGeek</h3>
+          <div class="item-card-en">通用遊戲介面 · Universal Game Interface</div>
+          <p>不是單一遊戲，而是整套遊戲 + AI + 腳本的技術平台。人類、RL Agent、LLM 都能透過統一介面控制任何遊戲。</p>
+          <ul class="item-feats b-accent">
+            <li>標準化協定（state / action / reward）</li>
+            <li>Blockly 腳本 Bot 製作系統</li>
+            <li>WebRTC 多人連線大廳</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="item-top-bar gold"></div>
+        <div class="item-body">
+          <div class="item-header">
+            <div class="item-emoji">🚀</div>
+            <span class="pill pill-gold">策略空間</span>
+          </div>
+          <h3>CubicCraft</h3>
+          <div class="item-card-en">太空任務旗艦競技</div>
+          <p>結合物理模擬、路線規劃與操作的太空任務遊戲。玩家與 AI 在同一宇宙中解題對抗，是 RL Agent 的絕佳訓練場。</p>
+          <ul class="item-feats gold-accent">
+            <li>物理引擎 + 路線最佳化挑戰</li>
+            <li>玩家 vs AI、AI vs AI 對戰</li>
+            <li>成績回寫 LeafLune 認證系統</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="item-top-bar g"></div>
+        <div class="item-body">
+          <div class="item-header">
+            <div class="item-emoji">🃏</div>
+            <span class="pill pill-green">宣學習</span>
+          </div>
+          <h3>Pinyin Poker</h3>
+          <div class="item-card-en">漢語拼音撲克牌</div>
+          <p>以標準撲克牌規格設計的漢語拼音卡牌，讓學生在玩牌過程中反覆接觸聲母、韻母與聲調，既是工具也是戰鬥卡組。</p>
+          <ul class="item-feats g-accent">
+            <li>覆蓋完整聲母韻母聲調系統</li>
+            <li>可自行設計遊戲規則</li>
+            <li>適用中文、拼音課程輔助</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="item-top-bar b"></div>
+        <div class="item-body">
+          <div class="item-header">
+            <div class="item-emoji">📖</div>
+            <span class="pill pill-green">宣學習</span>
+          </div>
+          <h3>Sentence Summoner</h3>
+          <div class="item-card-en">句型召喚卡 · SS</div>
+          <p>透過角色、動作、場景元素卡引導玩家組合出完整句子與短篇敘事。用「出招」代替造句練習，讓輸出變得有趣。</p>
+          <ul class="item-feats b-accent">
+            <li>適用英文、日文、中文等語言課</li>
+            <li>情境牌 + 行動牌組合系統</li>
+            <li>可搭配創意寫作、故事接龍</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="item-card">
+        <div class="item-top-bar gold"></div>
+        <div class="item-body">
+          <div class="item-header">
+            <div class="item-emoji">🐱</div>
+            <span class="pill pill-gold">宣學習</span>
+          </div>
+          <h3>Crazy Cat</h3>
+          <div class="item-card-en">瘋狂貓咪親子桌遊</div>
+          <p>玩家扮演在房間裡亂竄的貓咪，透過擲骰、跳躍與路徑規劃爭搶罐罐。可結合 3D 列印家具與立牌做延伸勞作課程。</p>
+          <ul class="item-feats gold-accent">
+            <li>寓教於樂的親子互動設計</li>
+            <li>3D 列印組合家具道具</li>
+            <li>可作為勞作課程延伸活動</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GAMEGEEK SKILL TREE ═══ -->
+<section id="gamegeek" class="gg">
+  <div class="wrap">
+    <div class="gg-header">
+      <div class="pill pill-blue" style="margin-bottom:0.65rem;">🎮 GameGeek 深度介紹</div>
+      <h2 class="gg-title">不只是遊戲，是 AI 遊戲宇宙的閘道。</h2>
+      <p class="gg-sub">GameGeek（GG）是通用遊戲介面（Universal Game Interface），四個階段讓人類、RL、LLM 與腳本共存在同一個 AI 遊戲生態平台。</p>
+    </div>
+
+    <div class="gg-layout">
+      <div class="skill-tree">
+        <div class="skill-node active">
+          <div class="skill-medal">🥇</div>
+          <div>
+            <h4>Phase 1 · 遊戲控制殼（Game Shell）</h4>
+            <p>共用直覺的 Web 遊戲主機 UI。D-pad、功能鍵、中央遊戲 iframe——任何支援協定的遊戲都能上架，介面自動一致。</p>
+            <div class="skill-tags">
+              <span class="pill pill-blue" style="font-size:0.67rem;">Web UI</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">iframe</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">D-pad</span>
+            </div>
+          </div>
+        </div>
+        <div class="skill-node active">
+          <div class="skill-medal">🥈</div>
+          <div>
+            <h4>Phase 2 · AI 控制介面（AI Agent Integration）</h4>
+            <p>GG 成為遊戲中介，提供標準化協定（state / action / reward）。可掛載 RL Agent、LLM Agent、腳本 Bot 或人類玩家。</p>
+            <div class="skill-tags">
+              <span class="pill pill-blue" style="font-size:0.67rem;">RL Agent</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">LLM Agent</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">state/action/reward</span>
+            </div>
+          </div>
+        </div>
+        <div class="skill-node">
+          <div class="skill-medal">🥉</div>
+          <div>
+            <h4>Phase 3 · Blockly 腳本系統（GG Script）</h4>
+            <p>內建 Blockly 讓使用者編寫自動化腳本、製作 rule-based AI，讓非工程背景的人也能製作 Bot 並理解 AI 決策流程。</p>
+            <div class="skill-tags">
+              <span class="pill pill-ghost" style="font-size:0.67rem;">Blockly</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">rule-based AI</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">視覺化腳本</span>
+            </div>
+          </div>
+        </div>
+        <div class="skill-node">
+          <div class="skill-medal">🏆</div>
+          <div>
+            <h4>Phase 4 · WebRTC 連線大廳（GG Online）</h4>
+            <p>所有遊戲共用的多人連線系統，提供房間建立、玩家配對、觀戰模式，支援 AI vs 人類、AI vs AI 等多種對戰形式。</p>
+            <div class="skill-tags">
+              <span class="pill pill-ghost" style="font-size:0.67rem;">WebRTC</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">匹配系統</span>
+              <span class="pill pill-ghost" style="font-size:0.67rem;">觀戰模式</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gg-aside">
+        <div class="gg-aside-card" style="background:rgba(61,220,132,0.07); border-color:rgba(61,220,132,0.2);">
+          <div style="font-size:1.3rem; margin-bottom:0.4rem;">🎣</div>
+          <h3>GG = 免費引流產品</h3>
+          <p>好玩、美觀、低門檻。作為 itch.io 遊戲合集與官網展示，讓更多人接觸 LeafLune 生態系，形成「Web 遊戲主機」的品牌識別。</p>
+          <div class="tags">
+            <span class="pill pill-green" style="font-size:0.67rem;">免費</span>
+            <span class="pill pill-ghost" style="font-size:0.67rem;">itch.io</span>
+            <span class="pill pill-ghost" style="font-size:0.67rem;">官網 Demo</span>
+          </div>
+        </div>
+        <div class="gg-arrow">↓</div>
+        <div class="gg-aside-card" style="background:rgba(251,191,36,0.07); border-color:rgba(251,191,36,0.2);">
+          <div style="font-size:1.3rem; margin-bottom:0.4rem;">💼</div>
+          <h3>RL Lab = 主力付費產品</h3>
+          <p>以 GG 為底層，建構完整 RL 教學平台（Blockly + 模擬 + 圖表），提供學校與機構訂閱制授權，課程可直接納入正式教材。</p>
+          <div class="tags">
+            <span class="pill pill-gold" style="font-size:0.67rem;">訂閱制</span>
+            <span class="pill pill-ghost" style="font-size:0.67rem;">校園授權</span>
+            <span class="pill pill-ghost" style="font-size:0.67rem;">營隊課程</span>
+          </div>
+        </div>
+        <div class="gg-summary">
+          <strong>GG 讓大家進來玩，RL Lab 讓你真正賺錢。</strong><br>
+          用遊戲的廣度換教育的深度——GG 是免費入口，RL Lab 才是核心收費產品。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BUSINESS MODEL ═══ -->
+<section id="business" class="biz">
+  <div class="wrap">
+    <div class="pill pill-ghost" style="margin-bottom:0.65rem;">💰 商業模式</div>
+    <h2 class="biz-title">三條現金流，養活整個宇宙。</h2>
+    <p class="biz-sub">用課程與工具養平台，用平台養品牌。每一條產品線都能彼此增強，而不是各自孤立。</p>
+
+    <div class="biz-grid">
+      <div class="biz-card" style="border-color:rgba(56,189,248,0.2);">
+        <div class="biz-icon">🧠</div>
+        <div class="biz-type" style="color:var(--blue);">現金流核心</div>
+        <h3>AI 程式課程</h3>
+        <p>以 Vibe Coding 系列為主，提供 AI 程式思維課程給學校、補習班與營隊，同時開放 Hahow / Udemy 線上課程。</p>
+        <ul class="biz-list">
+          <li>學校營隊 / 教師研習</li>
+          <li>Hahow / Udemy 線上課</li>
+          <li>B2B 機構授權包</li>
+        </ul>
+      </div>
+      <div class="biz-card" style="border-color:rgba(61,220,132,0.2);">
+        <div class="biz-icon">🎮</div>
+        <div class="biz-type" style="color:var(--green);">長期技術核心</div>
+        <h3>平台與工具授權</h3>
+        <p>ReinRoom、GameGeek、RL Lab 作為訂閱制或校園授權產品，提供穩定的企業與機構收入。</p>
+        <ul class="biz-list">
+          <li>ReinRoom 訂閱 / 授權</li>
+          <li>RL Lab 校園包</li>
+          <li>GG Script 進階功能</li>
+        </ul>
+      </div>
+      <div class="biz-card" style="border-color:rgba(251,191,36,0.2);">
+        <div class="biz-icon">🃏</div>
+        <div class="biz-type" style="color:var(--gold);">快速變現入口</div>
+        <h3>實體 &amp; 數位教材</h3>
+        <p>語言卡牌、桌遊套組、數位教材包透過 Gumroad、Shopee 上架，低製作門檻、高複用性。</p>
+        <ul class="biz-list">
+          <li>Gumroad 數位可列印版</li>
+          <li>Shopee / 實體桌遊套組</li>
+          <li>3D 列印道具</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="biz-formula">
+      <div class="biz-pill">
+        <div class="formula-item-title" style="color:var(--blue);">AI 工廠思維</div>
+        <p>我負責定規格，AI 負責大量生產，腳本負責把成果變成一顆按鈕。</p>
+      </div>
+      <div class="formula-sep">×</div>
+      <div class="biz-pill">
+        <div class="formula-item-title" style="color:var(--green);">平台化思維</div>
+        <p>優先使用平台賣產品，而不是靠高壓社交賣自己。</p>
+      </div>
+      <div class="formula-sep">×</div>
+      <div class="biz-pill">
+        <div class="formula-item-title" style="color:var(--gold);">可複用思維</div>
+        <p>每個規格做好後，就能用在多條產品線上，一次設計，反覆販售。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div class="cta-kicker pill pill-blue">🚀 加入宇宙</div>
+      <h2 class="cta-title">
+        這個宇宙正在建構中，<br>
+        你可以是第一批<span style="color:var(--green);">探索者</span>。
+      </h2>
+      <p class="cta-sub">
+        LeafLune 宇宙的產品與平台正在逐步開放。無論你是老師、家長、學生，還是對 AI 教育有興趣的夥伴，都歡迎加入這段旅程。
+      </p>
+      <div class="cta-actions">
+        <button class="btn btn-play">▶ 了解更多 · 敬請期待</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">查看產品線</button>
+      </div>
+      <div class="cta-stats">
+        <div>
+          <div class="cta-stat-n" style="color:var(--green);">3</div>
+          <div class="cta-stat-l">核心品牌</div>
+        </div>
+        <div>
+          <div class="cta-stat-n" style="color:var(--blue);">6+</div>
+          <div class="cta-stat-l">產品 &amp; 平台</div>
+        </div>
+        <div>
+          <div class="cta-stat-n" style="color:var(--gold);">4</div>
+          <div class="cta-stat-l">GG 發展階段</div>
+        </div>
+        <div>
+          <div class="cta-stat-n" style="color:var(--purple);">∞</div>
+          <div class="cta-stat-l">成長的可能</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <img src="leaflune_logo_nobg.png" alt="LeafLune" />
+      <div>
+        <div class="foot-brand-name">LeafLune Edutainment Studio</div>
+        <div class="foot-brand-sub">宣學習 · LeafLune · Strategy Space</div>
+      </div>
+    </div>
+    <div class="foot-links">
+      <a href="#core">品牌核心</a>
+      <a href="#story">品牌故事</a>
+      <a href="#brands">三大品牌</a>
+      <a href="#products">產品</a>
+      <a href="#gamegeek">GameGeek</a>
+    </div>
+    <div class="foot-copy">© <span id="yr"></span> LeafLune. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
