@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>文章 | LeafLune 宇宙</title>
+  <meta name="description" content="LeafLune 的知識內容主站——強化學習教學、AI 教育思維、遊戲化學習設計、創作工具。" />
+  <link rel="icon" type="image/png" href="/leaflune_logo_nobg.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07090f;
+      --bg2: #0d1117;
+      --bg3: #111827;
+      --green: #3ddc84;
+      --blue: #38bdf8;
+      --gold: #fbbf24;
+      --pink: #f472b6;
+      --purple: #a78bfa;
+      --text: #f1f5f9;
+      --sub: #94a3b8;
+      --dim: #475569;
+      --border: rgba(255,255,255,0.08);
+      --max: 1080px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(7,9,15,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.6rem; }
+    .nav-logo img { width: 32px; height: 32px; object-fit: contain; }
+    .nav-logo-text { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.04em; }
+    .nav-logo-sub { font-size: 0.65rem; color: var(--sub); margin-top: 1px; }
+    .nav-back {
+      font-size: 0.85rem; color: var(--sub);
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--border); border-radius: 6px;
+    }
+    .nav-back:hover { color: var(--text); border-color: var(--blue); }
+
+    /* HERO */
+    .hero {
+      padding: 4rem 0 2rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.8rem;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--sub);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* CATEGORY */
+    .category {
+      padding: 3rem 0 2rem;
+    }
+    .category-head {
+      display: flex; align-items: baseline; gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .category-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--blue);
+      font-weight: 700;
+    }
+    .category-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .category-meta {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: var(--sub);
+    }
+
+    /* ARTICLE GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--blue);
+    }
+    .card-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--bg3);
+      object-fit: cover;
+      display: block;
+    }
+    .card-body {
+      padding: 1rem 1.1rem 1.2rem;
+    }
+    .card-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--sub);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      line-height: 1.4;
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--sub);
+      line-height: 1.5;
+    }
+
+    /* card without image (text-only fallback) */
+    .card.no-img .card-body { padding-top: 1.4rem; }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 4rem;
+      padding: 2rem 0 3rem;
+      text-align: center;
+      color: var(--dim);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 2.5rem 0 1.5rem; }
+      .category { padding: 2rem 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/leaflune_logo_nobg.png" alt="LeafLune">
+      <div>
+        <div class="nav-logo-text">LeafLune</div>
+        <div class="nav-logo-sub">教育 · 認證 · 競賽宇宙</div>
+      </div>
+    </a>
+    <a href="/" class="nav-back">← 回首頁</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-tag">// ARTICLES · 知識主站</div>
+    <h1>文章</h1>
+    <p>學習變有趣，玩樂有價值。從強化學習、AI 教育，到創作工具與遊戲化思維。</p>
+  </div>
+</section>
+
+<!-- 強化學習分類 -->
+<section class="category" id="rl">
+  <div class="wrap">
+    <div class="category-head">
+      <span class="category-tag">CATEGORY · RL</span>
+      <span class="category-name">強化學習</span>
+      <span class="category-meta">12 篇</span>
+    </div>
+    <div class="grid">
+
+      <a href="/articles/rl/quickstart.html" class="card">
+        <img src="/articles/rl/img/qs-ui-start.png" class="card-img" alt="quickstart" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">入門</div>
+          <div class="card-title">五分鐘開始你的第一個 AI 實驗</div>
+          <div class="card-desc">不寫程式、開瀏覽器就能訓練 AI——從零到看到收斂結果。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/intro-rl.html" class="card">
+        <img src="/articles/rl/img/illus-bicycle.jpg" class="card-img" alt="intro-rl" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">核心概念</div>
+          <div class="card-title">強化學習是什麼？</div>
+          <div class="card-desc">試錯、獎勵、策略——AI 如何靠反覆嘗試學會做決定。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/intro-rr.html" class="card">
+        <img src="/articles/rl/img/illus-intro-rr.jpg" class="card-img" alt="intro-rr" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">平台導覽</div>
+          <div class="card-title">Rein Room 是什麼？</div>
+          <div class="card-desc">平台 1.0 完整功能巡禮——從遊戲、訓練、儀表板到資料匯出。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/qlearning.html" class="card">
+        <img src="/articles/rl/img/ql-qtable-heatmap.png" class="card-img" alt="qlearning" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">演算法</div>
+          <div class="card-title">Q-Learning — 決策價值怎麼學起來</div>
+          <div class="card-desc">從表格到熱力圖，看 AI 如何累積對「該做什麼」的判斷。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/dqn.html" class="card">
+        <img src="/articles/rl/img/dqn-r2-panel.png" class="card-img" alt="dqn" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">演算法</div>
+          <div class="card-title">DQN 是什麼？</div>
+          <div class="card-desc">當狀態變多到表格放不下——用神經網路接手 Q 值預測。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/exploration.html" class="card">
+        <img src="/articles/rl/img/illus-exploration.jpg" class="card-img" alt="exploration" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">核心概念</div>
+          <div class="card-title">探索 vs 利用</div>
+          <div class="card-desc">ε-greedy 與 Softmax 的差異——AI 怎麼平衡新嘗試與既有經驗。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/qtable-viz.html" class="card">
+        <img src="/articles/rl/img/viz-heatmap.png" class="card-img" alt="qtable-viz" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">儀表板</div>
+          <div class="card-title">讀懂 Q-Table 視覺化</div>
+          <div class="card-desc">熱力圖、動作分布、信心遮罩——看圖判斷 AI 學到了什麼。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/read-charts.html" class="card">
+        <img src="/articles/rl/img/charts-4panel.png" class="card-img" alt="read-charts" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">儀表板</div>
+          <div class="card-title">讀懂訓練圖表</div>
+          <div class="card-desc">Reward 曲線、Steps 曲線——訓練有沒有在變好的客觀證據。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/tuning.html" class="card">
+        <img src="/articles/rl/img/illus-tuning.jpg" class="card-img" alt="tuning" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">實戰</div>
+          <div class="card-title">調參數的心法</div>
+          <div class="card-desc">不是亂試——學會看訊號、改一個變數、觀察結果的 RL 工程心態。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/choose-game.html" class="card">
+        <img src="/articles/rl/img/game-cartpole.png" class="card-img" alt="choose-game" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">入門</div>
+          <div class="card-title">選哪個遊戲開始？</div>
+          <div class="card-desc">Multi-armed Bandit、Maze、CartPole、Heli——每個遊戲學的是什麼觀念。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/for-teachers.html" class="card">
+        <img src="/articles/rl/img/illus-classroom.jpg" class="card-img" alt="for-teachers" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">教育者</div>
+          <div class="card-title">把 RL 帶進課堂</div>
+          <div class="card-desc">給教育工作者的實戰指南——課程節奏、評量設計、學生會卡住的點。</div>
+        </div>
+      </a>
+
+      <a href="/articles/rl/rl-in-llm-era.html" class="card">
+        <img src="/articles/rl/img/illus-llm-vs-rl.jpg" class="card-img" alt="rl-in-llm-era" loading="lazy">
+        <div class="card-body">
+          <div class="card-label">觀點</div>
+          <div class="card-title">LLM 當道，學生還需要學 RL 嗎？</div>
+          <div class="card-desc">大語言模型不會取代強化學習——它們解決不同層次的問題。</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- 其他文章（既有）-->
+<section class="category" id="other">
+  <div class="wrap">
+    <div class="category-head">
+      <span class="category-tag">CATEGORY · MISC</span>
+      <span class="category-name">其他主題</span>
+      <span class="category-meta">3 篇</span>
+    </div>
+    <div class="grid">
+
+      <a href="/article-what-is-rl.html" class="card no-img">
+        <div class="card-body">
+          <div class="card-label">入門 · 強化學習</div>
+          <div class="card-title">什麼是強化學習？（精華版）</div>
+          <div class="card-desc">3 分鐘搞懂 RL：跟監督式學習的差別、應用場景、跟 AlphaGo 的關係。</div>
+        </div>
+      </a>
+
+      <a href="/article-kids-learn-ai.html" class="card no-img">
+        <div class="card-body">
+          <div class="card-label">教育 · 兒童</div>
+          <div class="card-title">孩子學 AI 該從哪開始？</div>
+          <div class="card-desc">不是學 Python 而是學 AI 思維——給家長與教師的入門指南。</div>
+        </div>
+      </a>
+
+      <a href="/article-3d-printing-guide.html" class="card no-img">
+        <div class="card-body">
+          <div class="card-label">創作 · 3D 列印</div>
+          <div class="card-title">3D 列印實作指南</div>
+          <div class="card-desc">從建模到出件——讓孩子把腦中的 idea 變成實體作品。</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <p>&copy; 2026 LeafLune 宇宙 · 教育 · 認證 · 競賽</p>
+    <p style="margin-top: 0.5rem;">
+      <a href="/" style="color: var(--blue);">回首頁</a> ·
+      <a href="/privacy.html" style="color: var(--blue);">隱私政策</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
