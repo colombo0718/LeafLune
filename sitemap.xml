@@ -8,22 +8,22 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/about.html</loc>
+    <loc>https://leaflune.org/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/contact.html</loc>
+    <loc>https://leaflune.org/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/courses.html</loc>
+    <loc>https://leaflune.org/courses</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/privacy.html</loc>
+    <loc>https://leaflune.org/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -37,91 +37,91 @@
 
   <!-- 知識文章（主站） -->
   <url>
-    <loc>https://leaflune.org/article-what-is-rl.html</loc>
+    <loc>https://leaflune.org/article-what-is-rl</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/article-kids-learn-ai.html</loc>
+    <loc>https://leaflune.org/article-kids-learn-ai</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/article-3d-printing-guide.html</loc>
+    <loc>https://leaflune.org/article-3d-printing-guide</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- 強化學習教學系列（articles/rl/） -->
   <url>
-    <loc>https://leaflune.org/articles/rl/quickstart.html</loc>
+    <loc>https://leaflune.org/articles/rl/quickstart</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/intro-rl.html</loc>
+    <loc>https://leaflune.org/articles/rl/intro-rl</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/intro-rr.html</loc>
+    <loc>https://leaflune.org/articles/rl/intro-rr</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/qlearning.html</loc>
+    <loc>https://leaflune.org/articles/rl/qlearning</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/dqn.html</loc>
+    <loc>https://leaflune.org/articles/rl/dqn</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/exploration.html</loc>
+    <loc>https://leaflune.org/articles/rl/exploration</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/qtable-viz.html</loc>
+    <loc>https://leaflune.org/articles/rl/qtable-viz</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/read-charts.html</loc>
+    <loc>https://leaflune.org/articles/rl/read-charts</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/tuning.html</loc>
+    <loc>https://leaflune.org/articles/rl/tuning</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/choose-game.html</loc>
+    <loc>https://leaflune.org/articles/rl/choose-game</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/for-teachers.html</loc>
+    <loc>https://leaflune.org/articles/rl/for-teachers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/articles/rl/rl-in-llm-era.html</loc>
+    <loc>https://leaflune.org/articles/rl/rl-in-llm-era</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- 營隊頁面 -->
   <url>
-    <loc>https://leaflune.org/camp-3d-print.html</loc>
+    <loc>https://leaflune.org/camp-3d-print</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://leaflune.org/camp-space-fighter.html</loc>
+    <loc>https://leaflune.org/camp-space-fighter</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
