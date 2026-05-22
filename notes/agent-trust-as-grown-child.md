@@ -146,5 +146,6 @@ CAPTAIN.md = **紅線清單 + 不越界的信任**
 - 商業層敘事：[`matrix-manager/meetings/2026-05-15-context-is-king-and-agent-invocation-protocol.md`](../../matrix-manager/meetings/2026-05-15-context-is-king-and-agent-invocation-protocol.md)
 - 治理紅線清單：[`matrix-manager/CAPTAIN.md`](../../matrix-manager/CAPTAIN.md)
 - 員工編制（成年身份）：[`matrix-manager/memory/agents-register.json`](../../matrix-manager/memory/agents-register.json)
-- LL 三軸定位：[`ll-three-axis-framework.md`](ll-three-axis-framework.md)
-- 5/21 AI 派工事故：（會議紀錄待補、暫見當日對話）
+- LL 三軸定位（空間框架）：[`ll-three-axis-framework.md`](ll-three-axis-framework.md)
+- **LL 抗脆性 4 階梯（時間演化框架）**：[`ll-antifragility-via-task-maturation.md`](ll-antifragility-via-task-maturation.md) ← 本文哲學的下一層展開、回答「強 AI 不該獨佔所有任務、如何讓 LL 不被任何單一 AI 綁架」
+- 5/21 AI 派工事故：[`matrix-manager/meetings/2026-05-21-cockpit-archive-and-dispatch-gate-protocol.md`](../../matrix-manager/meetings/2026-05-21-cockpit-archive-and-dispatch-gate-protocol.md)
