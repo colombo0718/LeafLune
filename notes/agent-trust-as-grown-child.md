@@ -14,6 +14,8 @@
 
 Simon Dennis 教授團隊 2026 archive 論文「**上下文提示淘汰了程序性任務的智能體編排**」。
 
+> 原始解析逐字稿見 [`降智真相_逐字稿.md`](降智真相_逐字稿.md)（cwsoft general-task-bot 那邊整理的中文解析、本文哲學的原始來源）。
+
 實驗：3 場景（Zoom 客服 / 旅遊預定 / 55 節點汽車理賠）× 1200 對話 × 5 維度評分。
 
 結論：**in-context 模式對框架編排模式 15 戰 0 負**——把整張流程圖一次塞進 Claude 200K context、讓模型自己決策、結果遠勝 LangChain / Google ADK / Microsoft Semantic Kernel 那套節點切分。
